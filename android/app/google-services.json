@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "409801703862",
+    "firebase_url": "https://noysi-production.firebaseio.com",
+    "project_id": "noysi-production",
+    "storage_bucket": "noysi-production.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:409801703862:android:e60b9b6b4cecf207b48117",
+        "android_client_info": {
+          "package_name": "com.noysi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "409801703862-hrrknladbe51tuptuhg5sd8jhahgvs2i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.noysi",
+            "certificate_hash": "9abfc0fcd24db9223c176b276ae0d62768361019"
+          }
+        },
+        {
+          "client_id": "409801703862-lqbau2atduiebgik3ao3ei2mv55rj28j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.noysi",
+            "certificate_hash": "6fa048b96ab105eae6e05ac5385f0c32f5b0879d"
+          }
+        },
+        {
+          "client_id": "409801703862-tfrifikss890ftujjdkcrvfsc3vnl3hm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnRFH-CYabuDkroJ4g34tGNSfLHEXw5Fg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "409801703862-4a9h431lfbetvsuj4e986o5ktkt53h81.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "409801703862-hq6mhvgmu40kragos0t85ckc7e425mpg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.noysi"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
