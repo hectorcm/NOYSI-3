@@ -31,7 +31,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-// import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -435,85 +435,85 @@ class _ProfileState extends StateWithBloC<ProfilePage, ProfileBloC>
                     SizedBox(
                       height: 2,
                     ),
-                    // StreamBuilder<PhoneNumber>(
-                    //   initialData: PhoneNumber(dialCode: "+1", isoCode: "US"),
-                    //   stream: bloc.phoneResult,
-                    //   builder: (context, phoneSnapshot) {
-                    //     return InternationalPhoneNumberInput(
-                    //       onInputChanged: (PhoneNumber value) {
-                    //         bloc.member?.profile?.phone = value.phoneNumber;
-                    //       },
-                    //       initialValue: phoneSnapshot.data,
-                    //       //textFieldController: bloc.phoneController,
-                    //       hintText: null,
-                    //       keyboardType: TextInputType.number,
-                    //       ignoreBlank: true,
-                    //       autoValidateMode: AutovalidateMode.onUserInteraction,
-                    //       locale: AppConfig.localeCode,
-                    //       scrollPadding: EdgeInsets.only(bottom: 30),
-                    //       textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.normal, color: R.color.grayDarkColor),
-                    //       inputDecoration: InputDecoration(
-                    //           contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-                    //           isCollapsed: true,
-                    //           enabledBorder: OutlineInputBorder(
-                    //               borderSide: BorderSide(
-                    //                   color: R.color.grayColor,
-                    //                   width: .8),
-                    //               borderRadius: BorderRadius.all(
-                    //                   Radius.circular(4))),
-                    //           focusedBorder: OutlineInputBorder(
-                    //               borderSide: BorderSide(
-                    //                   color: R.color.grayColor,
-                    //                   width: .8),
-                    //               borderRadius: BorderRadius.all(
-                    //                   Radius.circular(4))),
-                    //           errorBorder: OutlineInputBorder(
-                    //               borderSide: BorderSide(
-                    //                   color: Colors.redAccent,
-                    //                   width: .8),
-                    //               borderRadius: BorderRadius.all(
-                    //                   Radius.circular(4))),
-                    //           border: OutlineInputBorder(
-                    //               borderSide: BorderSide(
-                    //                   color: R.color.grayColor,
-                    //                   width: .8),
-                    //               borderRadius: BorderRadius.all(
-                    //                   Radius.circular(4)))
-                    //       ),
-                    //       errorMessage: R.string.invalidPhoneNumber,
-                    //       formatInput: true,
-                    //       selectorTextStyle: TextStyle(color: R.color.grayDarkColor, fontSize: 18, fontWeight: FontWeight.normal),
-                    //       autoFocusSearch: false,
-                    //       searchBoxDecoration: InputDecoration(
-                    //           contentPadding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-                    //           hintText: R.string.searchByCountryName,
-                    //           hintStyle: TextStyle(color: R.color.grayColor),
-                    //           enabledBorder: UnderlineInputBorder(
-                    //               borderSide: BorderSide(
-                    //                   color: R.color.grayColor,
-                    //                   width: .8),),
-                    //           focusedBorder: UnderlineInputBorder(
-                    //               borderSide: BorderSide(
-                    //                   color: R.color.grayColor,
-                    //                   width: .8)),
-                    //           errorBorder: UnderlineInputBorder(
-                    //               borderSide: BorderSide(
-                    //                   color: Colors.redAccent,
-                    //                   width: .8)),
-                    //           border: UnderlineInputBorder(
-                    //               borderSide: BorderSide(
-                    //                   color: R.color.grayColor,
-                    //                   width: .8))
-                    //       ),
-                    //       selectorConfig: SelectorConfig(
-                    //         selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
-                    //         leadingPadding: 7,
-                    //         trailingSpace: false,
-                    //         setSelectorButtonAsPrefixIcon: false,
-                    //       ),
-                    //     );
-                    //   },
-                    // ),
+                    StreamBuilder<PhoneNumber>(
+                      initialData: PhoneNumber(dialCode: "+1", isoCode: "US"),
+                      stream: bloc.phoneResult,
+                      builder: (context, phoneSnapshot) {
+                        return InternationalPhoneNumberInput(
+                          onInputChanged: (PhoneNumber value) {
+                            bloc.member?.profile?.phone = value.phoneNumber;
+                          },
+                          initialValue: phoneSnapshot.data,
+                          //textFieldController: bloc.phoneController,
+                          hintText: null,
+                          keyboardType: TextInputType.number,
+                          ignoreBlank: true,
+                          autoValidateMode: AutovalidateMode.onUserInteraction,
+                          locale: AppConfig.localeCode,
+                          scrollPadding: EdgeInsets.only(bottom: 30),
+                          textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.normal, color: R.color.grayDarkColor),
+                          inputDecoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+                              isCollapsed: true,
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: R.color.grayColor,
+                                      width: .8),
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(4))),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: R.color.grayColor,
+                                      width: .8),
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(4))),
+                              errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.redAccent,
+                                      width: .8),
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(4))),
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: R.color.grayColor,
+                                      width: .8),
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(4)))
+                          ),
+                          errorMessage: R.string.invalidPhoneNumber,
+                          formatInput: true,
+                          selectorTextStyle: TextStyle(color: R.color.grayDarkColor, fontSize: 18, fontWeight: FontWeight.normal),
+                          autoFocusSearch: false,
+                          searchBoxDecoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                              hintText: R.string.searchByCountryName,
+                              hintStyle: TextStyle(color: R.color.grayColor),
+                              enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: R.color.grayColor,
+                                      width: .8),),
+                              focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: R.color.grayColor,
+                                      width: .8)),
+                              errorBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.redAccent,
+                                      width: .8)),
+                              border: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: R.color.grayColor,
+                                      width: .8))
+                          ),
+                          selectorConfig: SelectorConfig(
+                            selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                            leadingPadding: 7,
+                            trailingSpace: false,
+                            setSelectorButtonAsPrefixIcon: false,
+                          ),
+                        );
+                      },
+                    ),
                     SizedBox(
                       height: 15,
                     ),

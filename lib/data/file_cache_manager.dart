@@ -4,6 +4,7 @@ import 'package:code/_res/R.dart';
 import 'package:code/data/api/remote/network_handler.dart';
 import 'package:code/data/api/remote/remote_constants.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 // import 'package:heic_to_jpg/heic_to_jpg.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
@@ -60,10 +61,18 @@ class FileCacheManager {
         //   fileETag = fileETag.split(".")[fileETag.split(".").length - 2] + ".$fileExt";
         // }
         if(fileExt.toLowerCase() == 'heic' && !imageUrl.endsWith("?original=true")) {
-          final jpgPath = file.path; //await HeicToJpg.convert(file.path);
-          if(jpgPath?.isNotEmpty == true) {
+          final tmpDir = (await getTemporaryDirectory()).path;
+          final target = '$tmpDir/${DateTime.now().millisecondsSinceEpoch}.jpg';
+          final result = await FlutterImageCompress.compressAndGetFile(
+            file.path,
+            target,
+            format: CompressFormat.jpeg,
+            quality: 90,
+          );
+          //final jpgPath = file.path; //await HeicToJpg.convert(file.path);
+          if(result != null) {
             if(file.existsSync()) file.deleteSync();
-            file = File(jpgPath!);
+            file = File(result.path);
             fileETag = file.path.split("/").last;
             fileExt = fileETag.split(".").last.replaceAll('.', "");
           }

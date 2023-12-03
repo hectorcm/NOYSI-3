@@ -20,7 +20,7 @@ import 'package:code/ui/_base/bloc_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_cropper/image_cropper.dart';
-// import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:code/utils/extensions.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -58,9 +58,9 @@ class ProfileBloC extends BaseBloC
   Stream<MeetingOptions> get meetingOptionsResult =>
       _meetingOptionsController.stream;
 
-  // BehaviorSubject<PhoneNumber> _phoneController = BehaviorSubject();
-  //
-  // Stream<PhoneNumber> get phoneResult => _phoneController.stream;
+  BehaviorSubject<PhoneNumber> _phoneController = BehaviorSubject();
+
+  Stream<PhoneNumber> get phoneResult => _phoneController.stream;
 
   @override
   void dispose() {
@@ -175,12 +175,12 @@ class ProfileBloC extends BaseBloC
     if (phoneText.trim().isNotEmpty) {
       if (!phoneText.trim().startsWith('+')) phoneText = "+$phoneText";
       try {
-        // final phone = await PhoneNumber.getRegionInfoFromPhoneNumber(phoneText);
-        //phoneController.text = phone.parseNumber();
-        // _phoneController.sinkAddSafe(phone);
+        final phone = await PhoneNumber.getRegionInfoFromPhoneNumber(phoneText);
+        // phoneController.text = phone.parseNumber();
+        _phoneController.sinkAddSafe(phone);
       } catch (ex) {
-        // _phoneController
-        //     .sinkAddSafe(PhoneNumber(dialCode: "+1", isoCode: "US"));
+        _phoneController
+            .sinkAddSafe(PhoneNumber(dialCode: "+1", isoCode: "US"));
       }
     }
   }
