@@ -77,7 +77,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jitsi_meet_wrapper/jitsi_meet_wrapper.dart';
-// import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'dart:math' as math;
 import 'package:code/utils/extensions.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -214,7 +214,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
           showShareContentView(shareContentModel);
         }
         sharingContentController.sinkAddSafe(null);
-        // ReceiveSharingIntent.reset();
+        ReceiveSharingIntent.reset();
       }
     });
     bloc.userDisabledController.listen((value) async {

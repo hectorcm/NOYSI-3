@@ -23,7 +23,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'dart:ui' as ui;
 import 'package:code/utils/extensions.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-// import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:uni_links/uni_links.dart';
 import '_res/R.dart';
 import 'domain/team/team_model.dart';
@@ -246,51 +246,51 @@ class _NoysiApp extends StateWithBloC<NoysiApp, AppBloC>
 
   initPlatformState() async {
     // For sharing images coming from outside the app while the app is in the memory
-    // _intentDataMediaStreamSubscription = ReceiveSharingIntent.getMediaStream()
-    //     .listen((List<SharedMediaFile> sharedFiles) async {
-    //   if (sharedFiles.isNotEmpty) {
-    //     final String path = sharedFiles[0].path;
-    //     sharingContentController
-    //         .sinkAddSafe(ShareContentModel(content: path, isFile: true));
-    //   }
-    // }, onError: (err) {
-    //   ToastUtil.showToast(err.toString());
-    // });
+    _intentDataMediaStreamSubscription = ReceiveSharingIntent.getMediaStream()
+        .listen((List<SharedMediaFile> sharedFiles) async {
+      if (sharedFiles.isNotEmpty) {
+        final String path = sharedFiles[0].path;
+        sharingContentController
+            .sinkAddSafe(ShareContentModel(content: path, isFile: true));
+      }
+    }, onError: (err) {
+      ToastUtil.showToast(err.toString());
+    });
 
     // For sharing images coming from outside the app while the app is closed
-    // ReceiveSharingIntent.getInitialMedia()
-    //     .then((List<SharedMediaFile> sharedFiles) async {
-    //   if (sharedFiles.isNotEmpty) {
-    //     final String path = sharedFiles[0].path;
-    //     sharingContentController
-    //         .sinkAddSafe(ShareContentModel(content: path, isFile: true));
-    //   }
-    // }).catchError((err) {
-    //   ToastUtil.showToast(err.toString());
-    // });
+    ReceiveSharingIntent.getInitialMedia()
+        .then((List<SharedMediaFile> sharedFiles) async {
+      if (sharedFiles.isNotEmpty) {
+        final String path = sharedFiles[0].path;
+        sharingContentController
+            .sinkAddSafe(ShareContentModel(content: path, isFile: true));
+      }
+    }).catchError((err) {
+      ToastUtil.showToast(err.toString());
+    });
 
     // For sharing text coming from outside the app while the app is in the memory
-    // _intentDataTextStreamSubscription =
-    //     ReceiveSharingIntent.getTextStream().listen((String sharedText) async {
-    //       if (sharedText.isNotEmpty == true) {
-    //         sharingContentController.sinkAddSafe(ShareContentModel(
-    //           content: sharedText,
-    //         ));
-    //       }
-    //     }, onError: (err) {
-    //       ToastUtil.showToast(err.toString());
-    //     });
+    _intentDataTextStreamSubscription =
+        ReceiveSharingIntent.getTextStream().listen((String sharedText) async {
+          if (sharedText.isNotEmpty == true) {
+            sharingContentController.sinkAddSafe(ShareContentModel(
+              content: sharedText,
+            ));
+          }
+        }, onError: (err) {
+          ToastUtil.showToast(err.toString());
+        });
 
     // For sharing text coming from outside the app while the app is closed
-    // ReceiveSharingIntent.getInitialText().then((String? sharedText) async {
-    //   if (sharedText?.isNotEmpty == true) {
-    //     sharingContentController.sinkAddSafe(ShareContentModel(
-    //       content: sharedText!,
-    //     ));
-    //   }
-    // }, onError: (err) {
-    //   ToastUtil.showToast(err?.toString() ?? "");
-    // });
+    ReceiveSharingIntent.getInitialText().then((String? sharedText) async {
+      if (sharedText?.isNotEmpty == true) {
+        sharingContentController.sinkAddSafe(ShareContentModel(
+          content: sharedText!,
+        ));
+      }
+    }, onError: (err) {
+      ToastUtil.showToast(err?.toString() ?? "");
+    });
 
     //For opening url while the app is closed
     try {
