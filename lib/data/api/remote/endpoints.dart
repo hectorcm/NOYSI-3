@@ -12,7 +12,8 @@ class Endpoint {
   static const String meetBaseUrlDev = "https://dev-meet.noysi.com";
   static const String meetBaseUrlPre = "https://pre-meet.noysi.com";
 
-  static String noysiZendesk = "https://noysi.zendesk.com/hc/${AppConfig.localeCode}";
+  static String noysiZendesk = "https://yourerp.tech/pages/noysi/${AppConfig.localeCode}";
+  // static String noysiZendesk = "https://noysi.zendesk.com/hc/${AppConfig.localeCode}";
 
   static String cnameHelp = "";
 
