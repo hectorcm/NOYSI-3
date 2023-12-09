@@ -12,12 +12,14 @@ import 'fcm/fcm_controller.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(FCMController.myBackgroundMessageHandler);
+  FirebaseMessaging.onBackgroundMessage(
+      FCMController.myBackgroundMessageHandler);
   Injector.initProd();
-  runZonedGuarded(() {
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
     runApp(
       NoysiApp(
-        initPage: HomePage(),
+        initPage: const HomePage(),
         fcmController: Injector.instance.getDependency(),
       ),
     );

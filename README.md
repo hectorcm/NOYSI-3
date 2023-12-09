@@ -1,3 +1,6 @@
+flutter build apk --release --target=lib/main_prod.dart 
+
+
 # code
 
 A new Flutter project.
