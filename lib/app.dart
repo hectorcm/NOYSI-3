@@ -33,11 +33,10 @@ class NoysiApp extends StatefulWidget {
   final Widget initPage;
   final IFCMController fcmController;
   static final GlobalKey<NavigatorState> navigatorKey =
-  new GlobalKey<NavigatorState>();
+      GlobalKey<NavigatorState>();
 
   const NoysiApp(
-      {Key? key, required this.initPage, required this.fcmController})
-      : super(key: key);
+      {super.key, required this.initPage, required this.fcmController});
 
   @override
   State<StatefulWidget> createState() => _NoysiApp();
@@ -54,7 +53,8 @@ class _NoysiApp extends StateWithBloC<NoysiApp, AppBloC>
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     print(state);
     super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.resumed || state == AppLifecycleState.inactive) {
+    if (state == AppLifecycleState.resumed ||
+        state == AppLifecycleState.inactive) {
       InMemoryData.isInForeground = true;
     } else {
       InMemoryData.isInForeground = false;
@@ -67,7 +67,7 @@ class _NoysiApp extends StateWithBloC<NoysiApp, AppBloC>
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 100)).then((value) async {
+    Future.delayed(const Duration(milliseconds: 100)).then((value) async {
       await bloc.loadLang();
     });
     widget.fcmController.setUp();
@@ -76,8 +76,7 @@ class _NoysiApp extends StateWithBloC<NoysiApp, AppBloC>
 
     teamThemeController.listen((event) {
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-          statusBarColor:
-          event.colors.primaryHeaderColor));
+          statusBarColor: event.colors.primaryHeaderColor));
     });
 
     SystemChrome.setPreferredOrientations([
@@ -93,13 +92,13 @@ class _NoysiApp extends StateWithBloC<NoysiApp, AppBloC>
         hasInternet = connection;
         hasInternet
             ? txShowInternetEstablished(NoysiApp.navigatorKey.currentContext!,
-            controllerCallBack: (controller) {
-              snackBarController = controller;
-            })
+                controllerCallBack: (controller) {
+                snackBarController = controller;
+              })
             : txShowInternetLost(NoysiApp.navigatorKey.currentContext!,
-            controllerCallBack: (controller) {
-              snackBarController = controller;
-            });
+                controllerCallBack: (controller) {
+                snackBarController = controller;
+              });
       }
     });
   }
@@ -121,17 +120,16 @@ class _NoysiApp extends StateWithBloC<NoysiApp, AppBloC>
   @override
   Widget buildWidget(BuildContext context) => _getRefreshConfig(context);
 
-
   Widget _getRefreshConfig(BuildContext context) {
     return RefreshConfiguration(
-        headerBuilder: () => MaterialClassicHeader(),
+        headerBuilder: () => const MaterialClassicHeader(),
         // Configure the default header indicator. If you have the same header indicator for each page, you need to set this
-        footerBuilder: () => ClassicFooter(),
+        footerBuilder: () => const ClassicFooter(),
         // Configure default bottom indicator
         headerTriggerDistance: 80.0,
         // header trigger refresh trigger distance
         springDescription:
-        SpringDescription(stiffness: 170, damping: 16, mass: 1.9),
+            const SpringDescription(stiffness: 170, damping: 16, mass: 1.9),
         // custom spring back animate,the props meaning see the flutter api
         maxOverScrollExtent: 100,
         //The maximum dragging range of the head. Set this property if a rush out of the view area occurs
@@ -152,7 +150,8 @@ class _NoysiApp extends StateWithBloC<NoysiApp, AppBloC>
     FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     return StreamBuilder<AppSettingsModel?>(
         stream: languageCodeResult,
-        initialData: AppSettingsModel(languageCode: RemoteConstants.defLang, isDarkMode: false),
+        initialData: AppSettingsModel(
+            languageCode: RemoteConstants.defLang, isDarkMode: false),
         builder: (context, snapshotSettings) {
           return StreamBuilder<TeamTheme>(
               stream: teamThemeController.stream,
@@ -166,8 +165,9 @@ class _NoysiApp extends StateWithBloC<NoysiApp, AppBloC>
                   ],
                   builder: (BuildContext context, Widget? child) {
                     return MediaQuery(
-                      data: MediaQuery.of(context)
-                          .copyWith(textScaleFactor: Platform.isAndroid ? .85 : .9),
+                      data: MediaQuery.of(context).copyWith(
+                          textScaler:
+                              TextScaler.linear(Platform.isAndroid ? .85 : .9)),
                       child: child!,
                     );
                   },
@@ -183,12 +183,13 @@ class _NoysiApp extends StateWithBloC<NoysiApp, AppBloC>
                   ],
                   supportedLocales: localizationDelegate.supportedLocales,
                   localeResolutionCallback: localizationDelegate.resolution(
-                    fallback: _getLanguageCode(snapshotSettings.data!.languageCode),
+                    fallback:
+                        _getLanguageCode(snapshotSettings.data!.languageCode),
                   ),
                   locale: _getLanguageCode(snapshotSettings.data!.languageCode),
                   home: widget.initPage,
                   routes: {
-                    NavigationUtils.HomeRoute: (context) => HomePage(),
+                    NavigationUtils.HomeRoute: (context) => const HomePage(),
                   },
                   onGenerateRoute: (settings) {
                     if (settings.name == NavigationUtils.TeamsRoute) {
@@ -197,35 +198,37 @@ class _NoysiApp extends StateWithBloC<NoysiApp, AppBloC>
                         args = settings.arguments as TeamPageArguments;
                       }
                       return MaterialPageRoute(
-                          settings: RouteSettings(name: NavigationUtils.TeamsRoute),
+                          settings:
+                              RouteSettings(name: NavigationUtils.TeamsRoute),
                           builder: (_) => TeamPage(
-                            memberDisabled: args?.memberDisabledEnabledModel,
-                            isFromLogin: args?.fromLogin ?? false,
-                            key: args?.key,
-                          ));
+                                memberDisabled:
+                                    args?.memberDisabledEnabledModel,
+                                isFromLogin: args?.fromLogin ?? false,
+                                key: args?.key,
+                              ));
                     }
                     assert(false, 'Need to implement ${settings.name}');
                     return null;
                   },
                   initialRoute: NavigationUtils.HomeRoute,
                   title: R.string.appName,
+
 //      initialRoute: AppRoutes.SPLASH,
 //      routes: AppRoutes.routes(),
                 );
               });
-        }
-    );
+        });
   }
 
   Locale _getLanguageCode(String languageCode) {
     return ui.Locale.fromSubtags(
         languageCode:
-        languageCode == "tc" || languageCode == "sc" ? "zh" : languageCode,
+            languageCode == "tc" || languageCode == "sc" ? "zh" : languageCode,
         scriptCode: languageCode == 'tc'
             ? "Hant"
             : languageCode == "sc"
-            ? "Hans"
-            : null);
+                ? "Hans"
+                : null);
   }
 
   ThemeData _getThemData(TeamTheme teamTheme) {
@@ -238,10 +241,57 @@ class _NoysiApp extends StateWithBloC<NoysiApp, AppBloC>
         fontFamily: RemoteConstants.fontFamily,
         primaryColor: R.color.primaryColor,
         primaryColorDark: R.color.primaryDarkColor,
-        toggleableActiveColor: R.color.secondaryColor,
-        colorScheme: ColorScheme.fromSwatch().copyWith(
-          secondary: R.color.accentColor,
-        ), textSelectionTheme: TextSelectionThemeData(cursorColor: R.color.primaryColor));
+        // colorScheme: ColorScheme.fromSwatch().copyWith(
+        //   secondary: R.color.accentColor,
+        // ),
+        textSelectionTheme:
+            TextSelectionThemeData(cursorColor: R.color.primaryColor),
+        checkboxTheme: CheckboxThemeData(
+          fillColor: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) {
+            if (states.contains(MaterialState.disabled)) {
+              return null;
+            }
+            if (states.contains(MaterialState.selected)) {
+              return R.color.secondaryColor;
+            }
+            return null;
+          }),
+        ),
+        radioTheme: RadioThemeData(
+          fillColor: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) {
+            if (states.contains(MaterialState.disabled)) {
+              return null;
+            }
+            if (states.contains(MaterialState.selected)) {
+              return R.color.secondaryColor;
+            }
+            return null;
+          }),
+        ),
+        switchTheme: SwitchThemeData(
+          thumbColor: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) {
+            if (states.contains(MaterialState.disabled)) {
+              return null;
+            }
+            if (states.contains(MaterialState.selected)) {
+              return R.color.secondaryColor;
+            }
+            return null;
+          }),
+          trackColor: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) {
+            if (states.contains(MaterialState.disabled)) {
+              return null;
+            }
+            if (states.contains(MaterialState.selected)) {
+              return R.color.secondaryColor;
+            }
+            return null;
+          }),
+        ));
   }
 
   initPlatformState() async {
@@ -272,14 +322,14 @@ class _NoysiApp extends StateWithBloC<NoysiApp, AppBloC>
     // For sharing text coming from outside the app while the app is in the memory
     _intentDataTextStreamSubscription =
         ReceiveSharingIntent.getTextStream().listen((String sharedText) async {
-          if (sharedText.isNotEmpty == true) {
-            sharingContentController.sinkAddSafe(ShareContentModel(
-              content: sharedText,
-            ));
-          }
-        }, onError: (err) {
-          ToastUtil.showToast(err.toString());
-        });
+      if (sharedText.isNotEmpty == true) {
+        sharingContentController.sinkAddSafe(ShareContentModel(
+          content: sharedText,
+        ));
+      }
+    }, onError: (err) {
+      ToastUtil.showToast(err.toString());
+    });
 
     // For sharing text coming from outside the app while the app is closed
     ReceiveSharingIntent.getInitialText().then((String? sharedText) async {
@@ -295,14 +345,18 @@ class _NoysiApp extends StateWithBloC<NoysiApp, AppBloC>
     //For opening url while the app is closed
     try {
       final initialUri = await getInitialUri();
-      if (initialUri != null) appLinksContentController.sinkAddSafe(AppLinksNavigationModel(link: initialUri.toString()));
+      if (initialUri != null)
+        appLinksContentController
+            .sinkAddSafe(AppLinksNavigationModel(link: initialUri.toString()));
     } on FormatException {
       ToastUtil.showToast("Uri format error");
     }
 
     //For opening url while the app is in memory
     _intentDataLinksStreamSubscription = uriLinkStream.listen((Uri? uri) {
-      if (uri != null) appLinksContentController.sinkAddSafe(AppLinksNavigationModel(link: uri.toString()));
+      if (uri != null)
+        appLinksContentController
+            .sinkAddSafe(AppLinksNavigationModel(link: uri.toString()));
     }, onError: (err) {
       ToastUtil.showToast(err?.toString() ?? "");
     });

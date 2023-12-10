@@ -90,8 +90,7 @@ import '../private_group_create/private_group_create_page.dart';
 class HomePage extends StatefulWidget {
   final String sharingExternalContent;
 
-  const HomePage({Key? key, this.sharingExternalContent = ""})
-      : super(key: key);
+  const HomePage({super.key, this.sharingExternalContent = ""});
 
   @override
   State<StatefulWidget> createState() => _HomeState();
@@ -99,9 +98,9 @@ class HomePage extends StatefulWidget {
 
 class _HomeState extends StateWithBloC<HomePage, HomeBloC>
     with WidgetsBindingObserver, SingleTickerProviderStateMixin {
-  ScrollController _scrollController = new ScrollController();
+  final ScrollController _scrollController = ScrollController();
   late AnimationController _animationController;
-  GlobalKey teamsPageKey = new GlobalKey();
+  GlobalKey teamsPageKey = GlobalKey();
   GlobalKey<ScaffoldState> homeAppBarKeyScaffoldState = GlobalKey();
 
   StreamSubscription? _webRtcListenerSubscription;
@@ -145,7 +144,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
       if (event == 0) {
         NavigationUtils.pushReplacement(context, SplashPage());
       } else if (event == 1) {
-        NavigationUtils.pushReplacement(context, LoginPage());
+        NavigationUtils.pushReplacement(context, const LoginPage());
       }
     });
     // absorbPointerAppController.listen((value) {
@@ -227,7 +226,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
         if (res is TeamModel) {
           bloc.changeTeam(res);
         } else if (res is bool && res) {
-          NavigationUtils.pushReplacement(context, LoginPage());
+          NavigationUtils.pushReplacement(context, const LoginPage());
         }
       });
     });
@@ -236,7 +235,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
         await bloc.logout(callApi: false, showLoading: false, cleanMail: true);
         await NavigationUtils.popUntilWithRouteAndMaterial(
             context, NavigationUtils.HomeRoute);
-        NavigationUtils.pushReplacement(context, LoginPage());
+        NavigationUtils.pushReplacement(context, const LoginPage());
       } else {
         bloc.doOnUserDeleted(value.tid, value.uid);
       }
@@ -250,7 +249,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
     });
     onWSSReconnected.listen((value) {
       if (value) {
-        Future.delayed(Duration(milliseconds: 400), () {
+        Future.delayed(const Duration(milliseconds: 400), () {
           bloc.reloadDataOnWSSReconnected();
         });
       }
@@ -444,7 +443,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                         builder: (ctx, snapshotCurrentMember) {
                           return StreamBuilder<List<DrawerChatModel>>(
                             stream: bloc.drawerChatModelListResult,
-                            initialData: [],
+                            initialData: const [],
                             builder: (ctx, snapshotDrawerChatList) {
                               return TXHomeAppBarWidget(
                                 drawerConfig: bloc.drawerConfigResult,
@@ -463,13 +462,9 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                                   child: ScaleTransition(
                                     scale: _animationController,
                                     child: Padding(
-                                      padding: EdgeInsets.only(bottom: 150),
+                                      padding:
+                                          const EdgeInsets.only(bottom: 150),
                                       child: FloatingActionButton(
-                                        child: Icon(
-                                          Icons.arrow_drop_down,
-                                          size: 40,
-                                          color: R.color.whiteColor,
-                                        ),
                                         backgroundColor: R.color.secondaryColor,
                                         onPressed: () {
                                           final value =
@@ -495,6 +490,11 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                                           // }
                                         },
                                         mini: true,
+                                        child: Icon(
+                                          Icons.arrow_drop_down,
+                                          size: 40,
+                                          color: R.color.whiteColor,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -572,7 +572,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                                       DrawerHeaderChatType.Message1x1) {
                                     NavigationUtils.push(
                                         context,
-                                        SearchUserPage(
+                                        const SearchUserPage(
                                           userGroupBy: UserGroupBy.team,
                                           activeMembersOnly: false,
                                         ));
@@ -644,7 +644,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                                   } else if (menu == DrawerMenuAction.Members) {
                                     NavigationUtils.push(
                                         context,
-                                        SearchUserPage(
+                                        const SearchUserPage(
                                           userGroupBy: UserGroupBy.team,
                                           activeMembersOnly: false,
                                           action: RemoteConstants.searchSearch,
@@ -781,10 +781,15 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                                     NavigationUtils.push(
                                         context,
                                         ChannelPreferencesPage(
-                                          channelModel:
-                                              bloc.inMemoryData.currentChannel!,
-                                          isAdmin: bloc.inMemoryData.currentChannel!.uid == snapshotCurrentMember.data!.id || snapshotCurrentMember.data!.userRol == UserRol.Admin
-                                        ));
+                                            channelModel: bloc
+                                                .inMemoryData.currentChannel!,
+                                            isAdmin: bloc.inMemoryData
+                                                        .currentChannel!.uid ==
+                                                    snapshotCurrentMember
+                                                        .data!.id ||
+                                                snapshotCurrentMember
+                                                        .data!.userRol ==
+                                                    UserRol.Admin));
                                   } else
                                     Fluttertoast.showToast(
                                         msg: menu.toString(),
@@ -810,7 +815,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                                       bloc.changeTeam(res);
                                     } else if (res is bool && res) {
                                       NavigationUtils.pushReplacement(
-                                          context, LoginPage());
+                                          context, const LoginPage());
                                     }
                                   } else if (option ==
                                       DrawerNavigationOption.InvitePeople) {
@@ -855,7 +860,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                                         child: Stack(
                                           children: <Widget>[
                                             TXGestureHideKeyBoard(
-                                              child: Container(
+                                              child: SizedBox(
                                                 height: double.infinity,
                                                 child: StreamBuilder<
                                                     ChatRoomUIModel>(
@@ -992,9 +997,10 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                                                                             .data);
                                                                 bloc.sendMessage(
                                                                     "$permanentLink $value");
-                                                              } else
+                                                              } else {
                                                                 bloc.sendMessage(
                                                                     value);
+                                                              }
                                                             },
                                                             onChange: (value) {
                                                               bloc.sendUserTyping();
@@ -1149,7 +1155,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
           child: CustomScrollView(
             center: centerKey,
             controller: _scrollController,
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             reverse: true,
             slivers: [
               SliverList(
@@ -1242,12 +1248,12 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
     if (channel == null) return Container();
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: channel.isM1x1
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 100,
                 ),
                 TXNetworkImage(
@@ -1258,7 +1264,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                       .getMember(bloc.inMemoryData.currentChannel!.other)),
                   placeholderImage: Image.asset(R.image.logo),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 TXTextWidget(
@@ -1268,7 +1274,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                               bloc.inMemoryData.getMember(channel.other)) ??
                           ""),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
               ],
@@ -1276,7 +1282,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
           : Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 100,
                 ),
                 TXTextWidget(
@@ -1285,7 +1291,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                   fontWeight: FontWeight.bold,
                   size: 25,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 TXTextWidget(
@@ -1295,14 +1301,18 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                               bloc.inMemoryData.getMember(channel.uid!)) ??
                           ""),
                 ),
-                channel.description.isNotEmpty ? SizedBox(
-                  height: 5,
-                ) : Container(),
-                channel.description.isNotEmpty ? TXTextWidget(
-                  textAlign: TextAlign.center,
-                  text: channel.description,
-                ) : Container(),
-                SizedBox(
+                channel.description.isNotEmpty
+                    ? const SizedBox(
+                        height: 5,
+                      )
+                    : Container(),
+                channel.description.isNotEmpty
+                    ? TXTextWidget(
+                        textAlign: TextAlign.center,
+                        text: channel.description,
+                      )
+                    : Container(),
+                const SizedBox(
                   height: 30,
                 ),
               ],
@@ -1368,7 +1378,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
     ThreadMetaChild? threadMetaChild = message.threadMetaChild;
     List<Widget> threadSectionList = [];
     if (threadMetaParent != null && threadMetaChild == null) {
-      threadMetaParent.participants.forEach((element) {
+      for (var element in threadMetaParent.participants) {
         threadSectionList.add(TXNetworkImage(
           forceLoad: true,
           height: 25,
@@ -1378,9 +1388,9 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
               members.firstWhereOrNull((m) => m.id == element)),
           placeholderImage: Image.asset(R.image.logo),
         ));
-      });
+      }
       if (threadMetaParent.participants.isNotEmpty) {
-        threadSectionList.add(SizedBox(
+        threadSectionList.add(const SizedBox(
           width: 5,
         ));
         threadSectionList.add(TXTextWidget(
@@ -1482,7 +1492,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                     ),
                     Expanded(
                       child: Container(
-                        margin: EdgeInsets.only(left: 8),
+                        margin: const EdgeInsets.only(left: 8),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -1490,7 +1500,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Expanded(
-                                  child: Container(
+                                  child: SizedBox(
                                     width: double.infinity,
                                     child: Column(
                                       crossAxisAlignment:
@@ -1498,8 +1508,8 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                                       children: <Widget>[
                                         showMessageMemberInfo
                                             ? Container(
-                                                margin:
-                                                    EdgeInsets.only(bottom: 7),
+                                                margin: const EdgeInsets.only(
+                                                    bottom: 7),
                                                 child: TXUserDateMessageWidget(
                                                     onTap: () {
                                                       if (member
@@ -1565,8 +1575,10 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                                                               RemoteConstants
                                                                   .threadMessageDeleted
                                                           ? Container(
-                                                              padding: EdgeInsets
-                                                                  .only(top: 1),
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                      top: 1),
                                                               child:
                                                                   TXTextWidget(
                                                                 text:
@@ -1603,7 +1615,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                                                             .secondaryColor,
                                                         size: 15,
                                                       ),
-                                                      SizedBox(
+                                                      const SizedBox(
                                                         width: 3,
                                                       ),
                                                       TXTextWidget(
@@ -1645,14 +1657,14 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                                                 threadMetaParent != null &&
                                                         threadMetaChild == null
                                                     ? Container(
+                                                        margin: const EdgeInsets
+                                                            .only(top: 3),
                                                         child: Icon(
                                                           Icons.message,
                                                           size: 15,
                                                           color:
                                                               R.color.grayColor,
                                                         ),
-                                                        margin: EdgeInsets.only(
-                                                            top: 3),
                                                       )
                                                     : Container(),
                                                 Expanded(
@@ -1730,11 +1742,12 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                                                   });
                                                 },
                                                 child: Container(
-                                                  padding: EdgeInsets.only(
-                                                      left: 10,
-                                                      right: 10,
-                                                      top: 5,
-                                                      bottom: 5),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 10,
+                                                          right: 10,
+                                                          top: 5,
+                                                          bottom: 5),
                                                   child: Wrap(
                                                     crossAxisAlignment:
                                                         WrapCrossAlignment
@@ -1843,7 +1856,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                               ],
                             ),
                             Container(
-                              padding: EdgeInsets.only(top: 5),
+                              padding: const EdgeInsets.only(top: 5),
                               child: Wrap(
                                 crossAxisAlignment: WrapCrossAlignment.center,
                                 spacing: 3,
@@ -1862,7 +1875,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
               ),
               (message.favorite)
                   ? Container(
-                      padding: EdgeInsets.only(left: 2, top: 2),
+                      padding: const EdgeInsets.only(left: 2, top: 2),
                       child: CircleAvatar(
                         backgroundColor: R.color.orange,
                         radius: 6,
@@ -1883,7 +1896,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
 
   List<Widget> _getReactions(BuildContext context, MessageModel message) {
     List<Widget> list = [];
-    message.reactions.forEach((element) {
+    for (var element in message.reactions) {
       if (element.userIds.isNotEmpty) {
         final w = InkWell(
           onTap: () {
@@ -1922,7 +1935,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
         );
         list.add(w);
       }
-    });
+    }
 
     if (message.reactions.isNotEmpty == true && list.isNotEmpty) {
       final w = InkWell(
@@ -1936,7 +1949,8 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
               });
         },
         child: Container(
-          padding: EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 10),
+          padding:
+              const EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 10),
           child: TXTextWidget(
             text: R.string.seeAll,
             color: R.color.secondaryColor,
@@ -1984,17 +1998,17 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
         children: <Widget>[
           isSending
               ? Container()
-              : Container(
+              : SizedBox(
                   height: 45,
                   child: TXMenuOptionItemWidget(
                     icon: Icon(Icons.link, color: R.color.grayColor),
                     text: R.string.copyPermanentLink,
-                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     onTap: () async {
                       await NavigationUtils.pop(context);
                       final link = await bloc
                           .conformMessageLink(bloc.currentMessageSelected);
-                      await Clipboard.setData(new ClipboardData(text: link));
+                      await Clipboard.setData(ClipboardData(text: link));
                       Fluttertoast.showToast(
                           msg: link,
                           toastLength: Toast.LENGTH_LONG,
@@ -2004,7 +2018,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                   ),
                 ),
           canPinUnpinMessage && !isSending && !isSelfUserEvent
-              ? Container(
+              ? SizedBox(
                   height: 45,
                   child: TXMenuOptionItemWidget(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -2023,10 +2037,10 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                   bloc.currentMessageSelected?.isThreadDeletedMessage == true ||
                   isSelfUserEvent
               ? Container()
-              : Container(
+              : SizedBox(
                   height: 45,
                   child: TXMenuOptionItemWidget(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     icon: Icon(isFile ? Icons.comment : Icons.content_copy,
                         color: R.color.grayColor),
                     text: isFile
@@ -2058,7 +2072,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
           isSending && !isNoysiEvent
               ? Container()
               : Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   height: 45,
                   child: TXMenuOptionItemWidget(
                     icon: Icon(Icons.insert_emoticon, color: R.color.grayColor),
@@ -2076,7 +2090,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
           isSending
               ? Container()
               : Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   height: 45,
                   child: TXMenuOptionItemWidget(
                     icon: Icon(isFavorite ? Icons.star : Icons.star_border,
@@ -2095,10 +2109,13 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                   !isSending &&
                   !isNoysiEvent &&
                   !isSelfUserEvent &&
-                  !(bloc.currentMessageSelected?.isThreadDeletedMessage == true) &&
-              (bloc.inMemoryData.currentChannel?.editMessagesEnabled == true || canPinUnpinMessage)
+                  !(bloc.currentMessageSelected?.isThreadDeletedMessage ==
+                      true) &&
+                  (bloc.inMemoryData.currentChannel?.editMessagesEnabled ==
+                          true ||
+                      canPinUnpinMessage)
               ? Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   height: 45,
                   child: TXMenuOptionItemWidget(
                     icon: Icon(Icons.edit, color: R.color.grayColor),
@@ -2120,7 +2137,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
           isSending || isSelfUserEvent || isFile || isNoysiEvent
               ? Container()
               : Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   height: 45,
                   child: TXMenuOptionItemWidget(
                     icon: Icon(Icons.task, color: R.color.grayColor),
@@ -2146,7 +2163,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
           isSending || isSelfUserEvent || (isNoysiEvent && !isFile)
               ? Container()
               : Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   height: 45,
                   child: TXMenuOptionItemWidget(
                     icon: Icon(
@@ -2184,7 +2201,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
               ? Container()
               : Container(
                   height: 45,
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: TXMenuOptionItemWidget(
                     icon: Icon(Icons.share, color: R.color.grayColor),
                     text: R.string.share,
@@ -2208,10 +2225,11 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                 ),
           canDeleteMessage && !isNoysiEvent && !isSelfUserEvent
               ? Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   height: 45,
                   child: TXMenuOptionItemWidget(
-                    icon: Icon(Icons.delete_forever, color: Colors.redAccent),
+                    icon: const Icon(Icons.delete_forever,
+                        color: Colors.redAccent),
                     text: R.string.remove,
                     textColor: Colors.redAccent,
                     onTap: () async {
@@ -2322,7 +2340,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
               text: messageModel.fileModel?.titleFixed ?? "",
               color: R.color.secondaryColor,
             ),
-            SizedBox(
+            const SizedBox(
               height: 8,
             ),
             Container(
@@ -2363,7 +2381,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                           : TXVideoPlayer(
                               link: messageModel.fileModel?.link ?? ""),
                   messageModel.fileModel?.isUploadingDownloading == true
-                      ? Container(
+                      ? SizedBox(
                           width: fileRenderW,
                           height: fileRenderH,
                           child: Center(
@@ -2381,7 +2399,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 8,
             ),
             TXTextWidget(
@@ -2415,19 +2433,19 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
 
   Widget _getMessageDateDivider(MessageModel messageModel) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: Column(
         children: <Widget>[
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
             children: <Widget>[
-              Expanded(
+              const Expanded(
                 flex: 1,
                 child: TXDividerWidget(),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 5,
               ),
               TXTextWidget(
@@ -2437,16 +2455,16 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                 color: R.color.blackColor,
                 fontWeight: FontWeight.bold,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 5,
               ),
-              Expanded(
+              const Expanded(
                 flex: 1,
                 child: TXDividerWidget(),
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 15,
           )
         ],
@@ -2476,7 +2494,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
         ), onAction: (action) async {
       if (action) {
         final event = await bloc.logout();
-        if (event) NavigationUtils.pushReplacement(context, LoginPage());
+        if (event) NavigationUtils.pushReplacement(context, const LoginPage());
       }
     },
         content: Container(
