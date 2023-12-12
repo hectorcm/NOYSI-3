@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:code/_res/R.dart';
+import 'package:code/data/api/remote/endpoints.dart';
 import 'package:code/domain/team/team_model.dart';
 import 'package:code/rtc/rtc_manager.dart';
 import 'package:code/rtc/rtc_model.dart';
@@ -149,7 +150,7 @@ class _TeamState extends StateWithBloC<TeamPage, TeamBloC> {
                                     TXButtonWidget(
                                         onPressed: () async {
                                           const url =
-                                              "https://ltd.noysi.com";
+                                             Endpoint.myTeam;
                                           if (await canLaunchUrlString(url)) {
                                             launchUrlString(url);
                                           }
