@@ -619,6 +619,7 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
                                       DrawerMenuAction.Preferences) {
                                     NavigationUtils.push(
                                         context,
+              
                                         ProfilePage(
                                             memberModel:
                                                 snapshotCurrentMember.data!));

@@ -1,4 +1,3 @@
-import '../../../_res/values/config.dart';
 
 class Endpoint {
   static const String apiBaseUrlDev = noysiBaseUrlDev;
@@ -12,9 +11,13 @@ class Endpoint {
   static const String meetBaseUrlDev = "https://dev-meet.noysi.com";
   static const String meetBaseUrlPre = "https://pre-meet.noysi.com";
 
+
+
+  static const String myTeam = "https://noysi.medium.com/noysi-deals-825412982f5c";
+
   // static String noysiZendesk = "https://yourerp.tech/pages/noysi/${AppConfig.localeCode}";
 
-  static String noysiZendesk = "https://yourerp.tech/pages/noysi";  // static String noysiZendesk = "https://noysi.zendesk.com/hc/${AppConfig.localeCode}";
+  static  String noysiZendesk = "https://yourerp.tech/pages/noysi";  // static String noysiZendesk = "https://noysi.zendesk.com/hc/${AppConfig.localeCode}";
 
   static String cnameHelp = "";
 

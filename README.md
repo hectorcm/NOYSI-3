@@ -1,4 +1,5 @@
 flutter build apk --release --target=lib/main_prod.dart 
+flutter build ios --release --target=lib/main_prod.dart
 
 
 # code
