@@ -13,7 +13,8 @@ import 'fcm/fcm_controller.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(FCMController.myBackgroundMessageHandler);
+  FirebaseMessaging.onBackgroundMessage(
+      FCMController.myBackgroundMessageHandler);
   Injector.initDev();
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   runZonedGuarded(() {

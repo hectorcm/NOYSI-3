@@ -5,27 +5,17 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "noysiyourerp",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "noysiyourerp (profile mode)",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile"
-        },
-        {
-            "name": "noysiyourerp (release mode)",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "release"
-        },
-        {
             "name": "noysiyourerp (developer mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "debug",
+            "program": "lib/main_dev.dart"
+        },
+        {
+            "name": "noysiyourerp (Production mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release",
             "program": "lib/main_prod.dart"
         }
     ]

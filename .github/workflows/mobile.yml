@@ -25,12 +25,12 @@ jobs:
 
     - uses: subosito/flutter-action@v2
       with:
-        #flutter-version: '2.10.5'
-        channel: "stable"
+        flutter-version: '3.16.5'
+        # channel: "stable"
         cache: true
 
     - run: flutter pub get
-    # - run: flutter build appbundle --target=lib/main_prod.dart 
+    - run: flutter build appbundle --target=lib/main_prod.dart 
     - run: flutter build apk --release --target=lib/main_prod.dart 
     
     - name: Push to Releases

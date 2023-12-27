@@ -1,7 +1,7 @@
-flutter build apk --release --target=lib/main_prod.dart 
-flutter build ios --release --target=lib/main_prod.dart
+ flutter build ios --release --target=lib/main_prod.dart
+flutter build appbundle --target=lib/main_prod.dart 
 
-
+flutter config --android-sdk C:/Users/USER/AppData/Local/Android/Sdk
 # code
 
 A new Flutter project.
