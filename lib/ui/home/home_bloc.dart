@@ -98,24 +98,24 @@ class HomeBloC extends BaseBloC with LoadingBloC, ErrorHandlerBloC {
 
   @override
   void dispose() {
-    _currentMemberController.close();
-    _unreadTeamsController.close();
-    _unreadCalendarController.close();
-    _openTasksController.close();
-    _chatRoomController.close();
-    _drawerChatModelListController.close();
-    _answerInMessageController.close();
-    _initController.close();
-    reverseFloatingButton.close();
-    refreshScroll.close();
-    messageArrivedForThisChannel.close();
-    _inputWidgetSizeController.close();
-    _teamController.close();
-    userDisabledController.close();
-    _fullScreenLoadingController.close();
-    _appVersionController.close();
-    disposeLoadingBloC();
-    disposeErrorHandlerBloC();
+    // _currentMemberController.close();
+    // _unreadTeamsController.close();
+    // _unreadCalendarController.close();
+    // _openTasksController.close();
+    // _chatRoomController.close();
+    // _drawerChatModelListController.close();
+    // _answerInMessageController.close();
+    // _initController.close();
+    // reverseFloatingButton.close();
+    // refreshScroll.close();
+    // messageArrivedForThisChannel.close();
+    // _inputWidgetSizeController.close();
+    // _teamController.close();
+    // userDisabledController.close();
+    // _fullScreenLoadingController.close();
+    // _appVersionController.close();
+    // disposeLoadingBloC();
+    // disposeErrorHandlerBloC();
   }
 
   BehaviorSubject<bool> _fullScreenLoadingController = BehaviorSubject();
@@ -199,9 +199,9 @@ class HomeBloC extends BaseBloC with LoadingBloC, ErrorHandlerBloC {
       _drawerChatModelListController.value;
 
   void disposeOnBackground() {
-    joinedTeamLocally.sinkAddSafe(false);
-    socketInitialized = false;
-    _irtcManager.disposeRTC();
+    // joinedTeamLocally.sinkAddSafe(false);
+    // socketInitialized = false;
+    // _irtcManager.disposeRTC();
   }
 
   void init() async {

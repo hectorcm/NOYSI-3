@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'fcm/fcm_controller.dart';
 
@@ -15,8 +16,10 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(
       FCMController.myBackgroundMessageHandler);
   Injector.initProd();
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+
+
   runZonedGuarded(() async {
-    WidgetsFlutterBinding.ensureInitialized();
     runApp(
       NoysiApp(
         initPage: const HomePage(),
