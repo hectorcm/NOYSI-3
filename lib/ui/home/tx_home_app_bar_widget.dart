@@ -49,7 +49,7 @@ class TXHomeAppBarWidget extends StatefulWidget {
   final ValueChanged<DrawerConfig> onDrawerConfigChanged;
 
   const TXHomeAppBarWidget({
-    Key? key,
+    super.key,
     required this.body,
     required this.team,
     required this.onSearchTapped,
@@ -72,7 +72,7 @@ class TXHomeAppBarWidget extends StatefulWidget {
     required this.openTasks,
     required this.unreadCalendar,
     required this.keyScaffoldState,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() => _TXHomeAppBarState();
@@ -98,12 +98,13 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
           userTypingMark = DateTime.now();
           setState(() {
             userTyping = CommonUtils.getMemberUsername(member) ?? "";
-            Future.delayed(Duration(seconds: 3), () {
+            Future.delayed(const Duration(seconds: 3), () {
               final dif = DateTime.now().difference(userTypingMark!);
-              if (dif.inSeconds > 2)
+              if (dif.inSeconds > 2) {
                 setState(() {
                   userTyping = "";
                 });
+              }
             });
           });
         }
@@ -124,25 +125,40 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
       key: widget.keyScaffoldState,
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
+        leading: GestureDetector(
+          onTap: () {
+            widget.keyScaffoldState.currentState!.openDrawer();
+          },
+          child: SizedBox(
+            width: 60,
+            child: IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () {
+                widget.keyScaffoldState.currentState!.openDrawer();
+              },
+            ),
+          ),
+        ),
         title: _getTitle(),
-        leadingWidth: 30,
+        leadingWidth: 60,
         actions: <Widget>[
           widget.currentChat?.callsEnabled == true ||
-              widget.currentChat?.uid == widget.member.id ||
-              widget.member.userRol == UserRol.Admin
+                  widget.currentChat?.uid == widget.member.id ||
+                  widget.member.userRol == UserRol.Admin
               ? TXGestureHideKeyBoard(
-            child: TXIconButtonWidget(
-              onPressed: widget.onVideoCallTapped,
-              icon: Icon(
-                Icons.video_call,
-                size: 30,
-              ),
-            ),
-          ) : Container(),
+                  child: TXIconButtonWidget(
+                    onPressed: widget.onVideoCallTapped,
+                    icon: const Icon(
+                      Icons.video_call,
+                      size: 30,
+                    ),
+                  ),
+                )
+              : Container(),
           TXGestureHideKeyBoard(
             child: TXIconButtonWidget(
               onPressed: widget.onFavoritesTapped,
-              icon: Icon(
+              icon: const Icon(
                 Icons.star_border,
               ),
             ),
@@ -150,23 +166,24 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
           TXGestureHideKeyBoard(
             child: TXIconButtonWidget(
               onPressed: widget.onSearchTapped,
-              icon: Icon(
+              icon: const Icon(
                 Icons.search,
               ),
             ),
           ),
           TXGestureHideKeyBoard(
             child: PopupMenuButton(
-                offset: Offset(0, kToolbarHeight),
-                icon: Icon(
+                offset: const Offset(0, kToolbarHeight),
+                icon: const Icon(
                   Icons.more_vert,
                 ),
                 itemBuilder: (ctx) {
                   return [..._popupActionsChatMenu()];
                 },
                 onSelected: (key) {
-                  if (key != null)
+                  if (key != null) {
                     widget.onMenuChatActionTapped(key as MenuChatAction);
+                  }
                 }),
           )
         ],
@@ -251,7 +268,7 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
         value: DrawerMenuAction.Logout,
         child: TXMenuOptionItemWidget(
             textColor: Colors.red,
-            icon: Icon(Icons.exit_to_app, color: Colors.red),
+            icon: const Icon(Icons.exit_to_app, color: Colors.red),
             text: R.string.signOut));
 
     list.add(PopupMenuItem(
@@ -265,7 +282,7 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
     list.add(authenticator);
     // list.add(downloads);
     list.add(help);
-    list.add(PopupMenuDivider(
+    list.add(const PopupMenuDivider(
       height: 10,
     ));
     list.add(PopupMenuItem(
@@ -280,7 +297,7 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
       //   list.add(plans);
     }
     list.add(members);
-    list.add(PopupMenuDivider(
+    list.add(const PopupMenuDivider(
       height: 10,
     ));
     list.add(PopupMenuItem(
@@ -290,11 +307,11 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
             fontWeight: FontWeight.bold,
             color: R.color.grayColor)));
     list.add(signOut);
-    list.add(PopupMenuDivider(
+    list.add(const PopupMenuDivider(
       height: 10,
     ));
     list.add(PopupMenuItem(
-        padding: EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         height: 10,
         child: StreamBuilder<String>(
           stream: widget.appVersion,
@@ -304,7 +321,7 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Image.asset(R.image.logoNoysiDarkBlue, width: 50),
-                SizedBox(
+                const SizedBox(
                   width: 5,
                 ),
                 Expanded(
@@ -410,7 +427,7 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
     final leaveChat = PopupMenuItem(
       value: MenuChatAction.LeaveChannel,
       child: TXMenuOptionItemWidget(
-        icon: Icon(
+        icon: const Icon(
           Icons.exit_to_app,
           color: Colors.redAccent,
         ),
@@ -450,8 +467,9 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
       list.add(mentions);
       list.add(chatMembers);
 
-      if (channel.channelModel?.isPrivateGroup == true && !isGuest)
+      if (channel.channelModel?.isPrivateGroup == true && !isGuest) {
         list.add(invite);
+      }
     }
 //    list.add(chatInfo);
     list.add(chatPreferences);
@@ -490,7 +508,7 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
                 children: <Widget>[
                   Card(
                     margin: EdgeInsets.zero,
-                    shape: ContinuousRectangleBorder(
+                    shape: const ContinuousRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(0))),
                     shadowColor: R.color.grayDarkColor,
                     color: snapshotTheme.data!.colors.primaryHeaderColor,
@@ -502,7 +520,7 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
                           widget.onMenuDrawerTapped!(value as DrawerMenuAction);
                         }
                       },
-                      offset: Offset(0, kToolbarHeight),
+                      offset: const Offset(0, kToolbarHeight),
                       itemBuilder: (ctx) {
                         return [..._popupActionsDrawerMenu()];
                       },
@@ -511,8 +529,8 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
                         initialData: null,
                         builder: (context, snapshotTeam) {
                           return Container(
-                            padding:
-                                EdgeInsets.only(left: 10, top: 4, bottom: 4),
+                            padding: const EdgeInsets.only(
+                                left: 10, top: 4, bottom: 4),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
@@ -525,7 +543,7 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
                                     R.image.logo,
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 15,
                                 ),
                                 Expanded(
@@ -541,17 +559,17 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
                                         size: 18,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 5,
                                       ),
                                       Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: <Widget>[
-                                          TXUserPresenceWidget(
+                                          const TXUserPresenceWidget(
                                             userPresence: UserPresence.online,
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             width: 3,
                                           ),
                                           Flexible(
@@ -581,9 +599,9 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
                                                         }
                                                       : null,
                                                   child: Container(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 2),
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 2),
                                                     child: TXTextWidget(
                                                       text: widget
                                                               .member
@@ -607,7 +625,7 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
                                     ],
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 TXIconButtonWidget(
@@ -650,8 +668,10 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
                             child: StreamBuilder<DrawerConfig>(
                               stream: widget.drawerConfig,
                               initialData: null,
-                              builder: (context, snapshotDrawerConfig) => _getDrawerChatListWidget(
-                                  snapshotTheme.data!.colors, snapshotDrawerConfig.data),
+                              builder: (context, snapshotDrawerConfig) =>
+                                  _getDrawerChatListWidget(
+                                      snapshotTheme.data!.colors,
+                                      snapshotDrawerConfig.data),
                             ),
                           )
                         ],
@@ -667,8 +687,11 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
     );
   }
 
-  Widget _getDrawerChatListWidget(TeamColors colors, DrawerConfig? drawerConfig) {
-    if (widget.drawerChatList.isEmpty || drawerConfig == null) return Container();
+  Widget _getDrawerChatListWidget(
+      TeamColors colors, DrawerConfig? drawerConfig) {
+    if (widget.drawerChatList.isEmpty || drawerConfig == null) {
+      return Container();
+    }
     List<Widget> list = [];
     DrawerChatWrapper orderedList = _getSortedList(widget.drawerChatList);
     if (orderedList.threads != null) {
@@ -680,7 +703,7 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
         },
       )));
     }
-    if(orderedList.favorites != null) {
+    if (orderedList.favorites != null) {
       list.add(TXGestureHideKeyBoard(
         child: TXAnimatedExpansionTile(
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8)
@@ -699,18 +722,19 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
             drawerChatModel: orderedList.favorites!.keys.first,
           ),
           children: [
-            ...orderedList.favorites!.values.first.map((e) => TXGestureHideKeyBoard(
-              child: TXDrawerChatItemWidget(
-                  drawerChatModel: e,
-                  onTap: () {
-                    widget.onDrawerChatTap(e);
-                  }),
-            )),
+            ...orderedList.favorites!.values.first
+                .map((e) => TXGestureHideKeyBoard(
+                      child: TXDrawerChatItemWidget(
+                          drawerChatModel: e,
+                          onTap: () {
+                            widget.onDrawerChatTap(e);
+                          }),
+                    )),
           ],
         ),
       ));
     }
-    if(widget.member.userRol != UserRol.Guest) {
+    if (widget.member.userRol != UserRol.Guest) {
       list.add(TXGestureHideKeyBoard(
         child: TXAnimatedExpansionTile(
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8)
@@ -732,13 +756,14 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
             },
           ),
           children: [
-            ...orderedList.channels.values.first.map((e) => TXGestureHideKeyBoard(
-              child: TXDrawerChatItemWidget(
-                  drawerChatModel: e,
-                  onTap: () {
-                    widget.onDrawerChatTap(e);
-                  }),
-            )),
+            ...orderedList.channels.values.first
+                .map((e) => TXGestureHideKeyBoard(
+                      child: TXDrawerChatItemWidget(
+                          drawerChatModel: e,
+                          onTap: () {
+                            widget.onDrawerChatTap(e);
+                          }),
+                    )),
             _getAddNewChannelWidget(
                 orderedList.channels.keys.first, colors.textColor)
           ],
@@ -767,14 +792,13 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
         ),
         children: [
           ...orderedList.ims.values.first.map((e) => TXGestureHideKeyBoard(
-            child: TXDrawerChatItemWidget(
-                drawerChatModel: e,
-                onTap: () {
-                  widget.onDrawerChatTap(e);
-                }),
-          )),
-          _getAddNewChannelWidget(
-              orderedList.ims.keys.first, colors.textColor)
+                child: TXDrawerChatItemWidget(
+                    drawerChatModel: e,
+                    onTap: () {
+                      widget.onDrawerChatTap(e);
+                    }),
+              )),
+          _getAddNewChannelWidget(orderedList.ims.keys.first, colors.textColor)
         ],
       ),
     ));
@@ -800,12 +824,12 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
         ),
         children: [
           ...orderedList.groups.values.first.map((e) => TXGestureHideKeyBoard(
-            child: TXDrawerChatItemWidget(
-                drawerChatModel: e,
-                onTap: () {
-                  widget.onDrawerChatTap(e);
-                }),
-          )),
+                child: TXDrawerChatItemWidget(
+                    drawerChatModel: e,
+                    onTap: () {
+                      widget.onDrawerChatTap(e);
+                    }),
+              )),
           _getAddNewChannelWidget(
               orderedList.groups.keys.first, colors.textColor)
         ],
@@ -897,7 +921,7 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
                     //   color: R.color.grayLightestColor,
                     // ),
                     isSelected: false,
-                    iconMargin: EdgeInsets.only(left: 2),
+                    iconMargin: const EdgeInsets.only(left: 2),
                     onTap: () {
                       NavigationUtils.pop(context);
                       widget.onNavigationOptionTap(
@@ -1019,17 +1043,18 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
           children: <Widget>[
             ism1x1
                 ? Container(
-                    margin: EdgeInsets.only(right: 5),
+                    margin: const EdgeInsets.only(right: 5),
                     child: TXUserPresenceWidget(
                       userPresence: channel?.memberModel?.userPresence ??
                           UserPresence.out,
-                      isUserEnabled: (channel?.memberModel?.active ?? false) && channel?.memberModel?.isDeletedUser == false,
+                      isUserEnabled: (channel?.memberModel?.active ?? false) &&
+                          channel?.memberModel?.isDeletedUser == false,
                     ),
                   )
                 : Container(),
             Expanded(
               child: Container(
-                margin: EdgeInsets.only(bottom: 2),
+                margin: const EdgeInsets.only(bottom: 2),
                 child: StreamBuilder<TeamModel>(
                   initialData: null,
                   stream: widget.team,
@@ -1064,7 +1089,7 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
         userTyping.isNotEmpty
             ? Column(
                 children: <Widget>[
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   TXTextWidget(
@@ -1175,9 +1200,9 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
 
       if (favoritesOnline.length > 1) {
         favoritesOnline.sort((c1, c2) {
-          if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount == 0)
+          if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount == 0) {
             return -1;
-          else if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount > 0)
+          } else if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount > 0)
             return c1.memberModel!.profile!.name
                 .toLowerCase()
                 .trim()
@@ -1194,9 +1219,9 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
 
       if (favoritesIdle.length > 1) {
         favoritesIdle.sort((c1, c2) {
-          if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount == 0)
+          if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount == 0) {
             return -1;
-          else if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount > 0)
+          } else if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount > 0)
             return c1.memberModel!.profile!.name
                 .toLowerCase()
                 .trim()
@@ -1213,9 +1238,9 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
 
       if (favoritesOffline.length > 1) {
         favoritesOffline.sort((c1, c2) {
-          if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount == 0)
+          if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount == 0) {
             return -1;
-          else if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount > 0)
+          } else if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount > 0)
             return c1.memberModel!.profile!.name
                 .toLowerCase()
                 .trim()
@@ -1232,9 +1257,9 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
 
       if (favoritesDisabled.length > 1) {
         favoritesDisabled.sort((c1, c2) {
-          if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount == 0)
+          if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount == 0) {
             return -1;
-          else if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount > 0)
+          } else if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount > 0)
             return c1.memberModel!.profile!.name
                 .toLowerCase()
                 .trim()
@@ -1251,9 +1276,9 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
 
       if (favoritesOpenChannels.length > 1) {
         favoritesOpenChannels.sort((c1, c2) {
-          if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount == 0)
+          if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount == 0) {
             return -1;
-          else if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount > 0)
+          } else if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount > 0)
             return c1.title
                 .toLowerCase()
                 .trim()
@@ -1270,9 +1295,9 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
 
       if (favoritesPrivateGroups.length > 1) {
         favoritesPrivateGroups.sort((c1, c2) {
-          if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount == 0)
+          if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount == 0) {
             return -1;
-          else if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount > 0)
+          } else if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount > 0)
             return c1.title
                 .toLowerCase()
                 .trim()
@@ -1314,9 +1339,9 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
 
     if (channels.length > 1) {
       channels.sort((c1, c2) {
-        if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount == 0)
+        if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount == 0) {
           return -1;
-        else if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount > 0)
+        } else if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount > 0)
           return c1.title
               .toLowerCase()
               .trim()
@@ -1367,9 +1392,9 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
 
     if (directChatOnline.length > 1) {
       directChatOnline.sort((c1, c2) {
-        if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount == 0)
+        if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount == 0) {
           return -1;
-        else if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount > 0)
+        } else if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount > 0)
           return c1.memberModel!.profile!.name
               .toLowerCase()
               .trim()
@@ -1386,9 +1411,9 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
 
     if (directChatIdle.length > 1) {
       directChatIdle.sort((c1, c2) {
-        if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount == 0)
+        if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount == 0) {
           return -1;
-        else if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount > 0)
+        } else if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount > 0)
           return c1.memberModel!.profile!.name
               .toLowerCase()
               .trim()
@@ -1405,9 +1430,9 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
 
     if (directChatOffline.length > 1) {
       directChatOffline.sort((c1, c2) {
-        if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount == 0)
+        if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount == 0) {
           return -1;
-        else if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount > 0)
+        } else if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount > 0)
           return c1.memberModel!.profile!.name
               .toLowerCase()
               .trim()
@@ -1424,9 +1449,9 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
 
     if (directChatDisabled.length > 1) {
       directChatDisabled.sort((c1, c2) {
-        if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount == 0)
+        if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount == 0) {
           return -1;
-        else if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount > 0)
+        } else if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount > 0)
           return c1.memberModel!.profile!.name
               .toLowerCase()
               .trim()
@@ -1464,9 +1489,9 @@ class _TXHomeAppBarState extends State<TXHomeAppBarWidget> {
 
     if (privateGroup.length > 1) {
       privateGroup.sort((c1, c2) {
-        if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount == 0)
+        if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount == 0) {
           return -1;
-        else if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount > 0)
+        } else if (c1.unreadMessagesCount > 0 && c2.unreadMessagesCount > 0)
           return c1.title
               .toLowerCase()
               .trim()
@@ -1511,5 +1536,9 @@ class DrawerChatWrapper {
 class DrawerConfig {
   bool favoritesExpanded, imsExpanded, groupsExpanded, channelExpanded;
 
-  DrawerConfig({this.favoritesExpanded = true, this.imsExpanded = true, this.groupsExpanded = true, this.channelExpanded = true});
+  DrawerConfig(
+      {this.favoritesExpanded = true,
+      this.imsExpanded = true,
+      this.groupsExpanded = true,
+      this.channelExpanded = true});
 }

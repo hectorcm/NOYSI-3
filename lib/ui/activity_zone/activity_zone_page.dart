@@ -36,7 +36,8 @@ class ActivityZonePage extends StatefulWidget {
   final TeamJoinedModel joinedTeam;
   final MemberModel currentUser;
 
-  ActivityZonePage({required this.joinedTeam, required this.currentUser});
+  const ActivityZonePage(
+      {super.key, required this.joinedTeam, required this.currentUser});
 
   @override
   State<StatefulWidget> createState() => _ActivityZoneState();
@@ -107,7 +108,7 @@ class _ActivityZoneState
             title: R.string.activityZone,
             actions: [
               IconButton(
-                icon: Icon(Icons.filter_list),
+                icon: const Icon(Icons.filter_list),
                 onPressed: () {
                   showTXModalBottomSheet(
                       context: context,
@@ -117,7 +118,7 @@ class _ActivityZoneState
                 },
               ),
               PopupMenuButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.more_vert,
                 ),
                 itemBuilder: (context) {
@@ -139,7 +140,7 @@ class _ActivityZoneState
                                 color: R.color.darkColor,
                                 size: 16,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 5,
                               ),
                               Icon(Icons.info_outline,
@@ -160,7 +161,7 @@ class _ActivityZoneState
                                 color: R.color.darkColor,
                                 size: 16,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 5,
                               ),
                               Icon(Icons.info_outline,
@@ -186,7 +187,7 @@ class _ActivityZoneState
                     child: snapshot.data!.list.isNotEmpty
                         ? ListView.builder(
                             controller: scrollController,
-                            padding: EdgeInsets.only(
+                            padding: const EdgeInsets.only(
                                 top: 20, bottom: 10, left: 10, right: 10),
                             itemCount: snapshot.data?.list.length,
                             itemBuilder: (context, index) {
@@ -211,14 +212,14 @@ class _ActivityZoneState
                                             fontWeight: FontWeight.bold,
                                             size: 25,
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             height: 10,
                                           ),
                                           TXTextWidget(
                                             textAlign: TextAlign.center,
                                             text: R.string.activityZoneHeader,
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             height: 30,
                                           ),
                                           Container(
@@ -245,7 +246,7 @@ class _ActivityZoneState
                           )
                         : !bloc.isFiltered
                             ? SingleChildScrollView(
-                                padding: EdgeInsets.only(
+                                padding: const EdgeInsets.only(
                                     top: 20, bottom: 10, left: 10, right: 10),
                                 child: Center(
                                   child: Column(
@@ -258,7 +259,7 @@ class _ActivityZoneState
                                         fontWeight: FontWeight.bold,
                                         size: 25,
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 10,
                                       ),
                                       TXTextWidget(
@@ -303,9 +304,9 @@ class _ActivityZoneState
             drawGap: true,
             indicatorXY: 0.25,
             indicator: Container(
-              padding: EdgeInsets.all(3).copyWith(left: 5, right: 5),
+              padding: const EdgeInsets.all(3).copyWith(left: 5, right: 5),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(4)),
+                borderRadius: const BorderRadius.all(Radius.circular(4)),
                 border: Border.all(color: R.color.secondaryColor, width: 1),
               ),
               child: Image.asset(
@@ -329,7 +330,7 @@ class _ActivityZoneState
                             color: R.color.darkColor,
                             size: 16,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 5,
                           ),
                           Icon(Icons.info_outline, color: R.color.grayColor),
@@ -340,11 +341,13 @@ class _ActivityZoneState
                   : bloc.onTapActivity(model, widget.joinedTeam);
             },
             child: Container(
-              padding: EdgeInsets.only(left: 10, bottom: 20),
+              padding: const EdgeInsets.only(left: 10, bottom: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Wrap(
+                    spacing: 3,
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       Container(
                         child: TXTextWidget(
@@ -372,18 +375,20 @@ class _ActivityZoneState
                         ),
                       ),
                     ],
-                    spacing: 3,
-                    crossAxisAlignment: WrapCrossAlignment.center,
                   ),
                   Container(
-                    constraints: BoxConstraints(
+                    height: 60,
+                    constraints: const BoxConstraints(
                       minHeight: 50,
                     ),
                     child: TXHtmlWidget(
                       shrinkWrap: true,
                       style: {
                         "div.activity-body": Style(
-                            color: R.color.primaryDarkColor, fontSize: FontSize(20)),
+                            maxLines: 3,
+                            textOverflow: TextOverflow.ellipsis,
+                            color: R.color.primaryDarkColor,
+                            fontSize: FontSize(20)),
                         ".mention-generic": Style(
                           textDecoration: TextDecoration.none,
                           color: R.color.secondaryColor,
@@ -403,9 +408,9 @@ class _ActivityZoneState
   }
 
   String _getActivityText(ActivityModel model) {
-    final part1 = "<div class=\"activity-body\">";
+    const part1 = "<div class=\"activity-body\">";
     String part2 = "";
-    final part3 = "</div>";
+    const part3 = "</div>";
     if (model.type == ACTIVITY_TYPE.task_created &&
         model.metaData is TaskCreatedMetaModel) {
       final meta = model.metaData as TaskCreatedMetaModel;
@@ -552,14 +557,14 @@ class _ActivityZoneState
 
   Widget _getDateDivider(ActivityModel model) {
     return Container(
-      padding: EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.only(bottom: 20),
       child: Row(
         children: <Widget>[
-          Expanded(
+          const Expanded(
             flex: 1,
             child: TXDividerWidget(),
           ),
-          SizedBox(
+          const SizedBox(
             width: 5,
           ),
           TXTextWidget(
@@ -568,10 +573,10 @@ class _ActivityZoneState
             color: R.color.blackColor,
             fontWeight: FontWeight.bold,
           ),
-          SizedBox(
+          const SizedBox(
             width: 5,
           ),
-          Expanded(
+          const Expanded(
             flex: 1,
             child: TXDividerWidget(),
           ),
@@ -613,12 +618,12 @@ class _ActivityZoneState
         initialData: ActivityFilter(),
         builder: (context, snapshot) {
           return SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Container(
-              constraints: BoxConstraints(maxHeight: 180),
+              constraints: const BoxConstraints(maxHeight: 180),
               child: Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Stack(
@@ -639,9 +644,10 @@ class _ActivityZoneState
                         alignment: Alignment.centerRight,
                         child: InkWell(
                           onTap: () {
-                            if (bloc.isFiltered)
+                            if (bloc.isFiltered) {
                               bloc.removeFilter(
                                   removeDate: true, removeType: true);
+                            }
                           },
                           child: Container(
                             child: TXTextWidget(
@@ -655,11 +661,11 @@ class _ActivityZoneState
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
-                  TXDividerWidget(),
-                  Container(
+                  const TXDividerWidget(),
+                  SizedBox(
                     height: 45,
                     child: TXMenuOptionItemWidget(
                       trailing: snapshot.data!.types.isNotEmpty
@@ -669,21 +675,23 @@ class _ActivityZoneState
                                 bloc.removeFilter(removeType: true);
                               },
                               child: Container(
-                                padding: EdgeInsets.all(3)
+                                padding: const EdgeInsets.all(3)
                                     .copyWith(left: 5, right: 5),
                                 decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(40)),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(40)),
                                   border: Border.all(
                                       color: R.color.grayLightColor, width: 1),
                                 ),
                                 child: Row(
                                   children: [
-                                    Icon(Icons.cancel_outlined),
-                                    SizedBox(width: 3),
+                                    const Icon(Icons.cancel_outlined),
+                                    const SizedBox(width: 3),
                                     TXTextWidget(
-                                        text:
-                                            "${SingleSelectionModel.getActivityNameByType(snapshot.data!.types.first, isForFilter: true)}"),
+                                        text: SingleSelectionModel
+                                            .getActivityNameByType(
+                                                snapshot.data!.types.first,
+                                                isForFilter: true)),
                                   ],
                                 ),
                               ),
@@ -703,7 +711,7 @@ class _ActivityZoneState
                       },
                     ),
                   ),
-                  Row(
+                  const Row(
                     children: [
                       SizedBox(
                         width: 25,
@@ -713,7 +721,7 @@ class _ActivityZoneState
                       ),
                     ],
                   ),
-                  Container(
+                  SizedBox(
                     height: 45,
                     child: TXMenuOptionItemWidget(
                       trailing: snapshot.data?.dateRange != null
@@ -723,18 +731,18 @@ class _ActivityZoneState
                                 bloc.removeFilter(removeDate: true);
                               },
                               child: Container(
-                                padding: EdgeInsets.all(3)
+                                padding: const EdgeInsets.all(3)
                                     .copyWith(left: 5, right: 5),
                                 decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(40)),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(40)),
                                   border: Border.all(
                                       color: R.color.grayLightColor, width: 1),
                                 ),
                                 child: Row(
                                   children: [
-                                    Icon(Icons.cancel_outlined),
-                                    SizedBox(width: 3),
+                                    const Icon(Icons.cancel_outlined),
+                                    const SizedBox(width: 3),
                                     TXTextWidget(
                                         text:
                                             "${CalendarUtils.showInFormat(R.string.dateFormat6, snapshot.data?.dateRange?.start)} - ${CalendarUtils.showInFormat(R.string.dateFormat6, snapshot.data?.dateRange?.end)}"),
@@ -762,7 +770,7 @@ class _ActivityZoneState
                                             20),
                                     child: Column(
                                       children: [
-                                        Container(
+                                        SizedBox(
                                           height: 300,
                                           child: SfDateRangePicker(
                                             headerStyle:
@@ -804,7 +812,7 @@ class _ActivityZoneState
                                             maxDate: now,
                                           ),
                                         ),
-                                        Container(
+                                        SizedBox(
                                           height: 50,
                                           child: Row(
                                             mainAxisAlignment:
@@ -880,7 +888,7 @@ class _ActivityZoneState
                       },
                     ),
                   ),
-                  Row(
+                  const Row(
                     children: [
                       SizedBox(
                         width: 25,
@@ -902,10 +910,10 @@ class _ActivityZoneState
     final options = SingleSelectionModel.getActivityCategories(
         currentFilter.types.isNotEmpty ? currentFilter.types.first : null);
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Container(
@@ -915,10 +923,10 @@ class _ActivityZoneState
               size: 18,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
-          TXDividerWidget(),
+          const TXDividerWidget(),
           ..._getCategoriesWidget(options),
         ],
       ),
@@ -929,23 +937,24 @@ class _ActivityZoneState
     return list
         .map((e) => Column(
               children: [
-                Container(
+                SizedBox(
                   height: 45,
                   child: TXMenuOptionItemWidget(
                     text: e.displayName,
                     trailing: e.isSelected
                         ? Container(
-                            child: Icon(Icons.check),
+                            child: const Icon(Icons.check),
                           )
                         : Container(),
                     onTap: () async {
                       NavigationUtils.pop(context);
-                      if (!e.isSelected)
+                      if (!e.isSelected) {
                         bloc.filterByType(ACTIVITY_TYPE.values[e.index]);
+                      }
                     },
                   ),
                 ),
-                TXDividerWidget(),
+                const TXDividerWidget(),
               ],
             ))
         .toList();
@@ -993,7 +1002,7 @@ class _ActivityZoneState
   }
 
   Widget _getUserUsageInfo() {
-    return Container(
+    return SizedBox(
       height: 45,
       child: bloc.userUsage == null
           ? TXTextWidget(
@@ -1019,7 +1028,7 @@ class _ActivityZoneState
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Row(
@@ -1048,7 +1057,7 @@ class _ActivityZoneState
   }
 
   Widget _getTeamUsageInfo() {
-    return Container(
+    return SizedBox(
       height: 45,
       child: bloc.teamUsage == null
           ? TXTextWidget(
@@ -1074,7 +1083,7 @@ class _ActivityZoneState
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Row(
@@ -1104,7 +1113,7 @@ class _ActivityZoneState
 
   Widget _getMoreInfoWidget(ActivityModel model) {
     SignedInMetaModel? session = model.metaData as SignedInMetaModel?;
-    return Container(
+    return SizedBox(
       height: session!.isMobile ? 145 : 100,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1125,7 +1134,7 @@ class _ActivityZoneState
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Row(
@@ -1141,7 +1150,7 @@ class _ActivityZoneState
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Row(
@@ -1157,7 +1166,7 @@ class _ActivityZoneState
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Row(
@@ -1173,7 +1182,7 @@ class _ActivityZoneState
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Row(
@@ -1189,7 +1198,7 @@ class _ActivityZoneState
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Row(
@@ -1222,7 +1231,7 @@ class _ActivityZoneState
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Row(
@@ -1238,7 +1247,7 @@ class _ActivityZoneState
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Row(
@@ -1254,7 +1263,7 @@ class _ActivityZoneState
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Row(

@@ -398,16 +398,16 @@ class _HomeState extends StateWithBloC<HomePage, HomeBloC>
     bloc.init();
   }
 
-  // @override
-  // void dispose() {
-  //   WidgetsBinding.instance.removeObserver(this);
-  //   _scrollController.dispose();
-  //   _animationController.dispose();
-  //   _webRtcListenerSubscription?.cancel();
-  //   _sharingContentSubscription?.cancel();
-  //   _appLinksContentSubscription?.cancel();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    // WidgetsBinding.instance.removeObserver(this);
+    // _scrollController.dispose();
+    // _animationController.dispose();
+    // _webRtcListenerSubscription?.cancel();
+    // _sharingContentSubscription?.cancel();
+    // _appLinksContentSubscription?.cancel();
+    super.dispose();
+  }
 
 //  bool isAbsorbingTree = false;
   @override
