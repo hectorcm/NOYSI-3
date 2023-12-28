@@ -233,6 +233,7 @@ class _NoysiApp extends StateWithBloC<NoysiApp, AppBloC>
 
   ThemeData _getThemData(TeamTheme teamTheme) {
     return ThemeData(
+        useMaterial3: false,
         appBarTheme: AppBarTheme(
           iconTheme: IconThemeData(color: teamTheme.colors.textColor),
           backgroundColor: teamTheme.colors.primaryHeaderColor,

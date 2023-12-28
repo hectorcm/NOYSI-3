@@ -31,7 +31,7 @@ jobs:
 
     - run: flutter pub get
     - run: flutter build appbundle --target=lib/main_prod.dart 
-    - run: flutter build apk --release --target=lib/main_prod.dart 
+    # - run: flutter build apk --release --target=lib/main_prod.dart 
     
     - name: Push to Releases
       uses: ncipollo/release-action@v1
