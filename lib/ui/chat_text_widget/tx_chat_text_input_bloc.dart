@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'package:another_audio_recorder/another_audio_recorder.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -23,6 +24,7 @@ import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mime/mime.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:record/record.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:code/utils/extensions.dart';
 import 'package:vibration/vibration.dart';
@@ -53,35 +55,36 @@ class TXChatTextInputBloC extends BaseBloC with ErrorHandlerBloC {
     disposeErrorHandlerBloC();
   }
 
-  BehaviorSubject<bool> _showUploadingController = new BehaviorSubject();
+  final BehaviorSubject<bool> _showUploadingController = BehaviorSubject();
 
   Stream<bool> get showUploadingResult => _showUploadingController.stream;
 
-  BehaviorSubject<UploadProgress> _uploadingController = new BehaviorSubject();
+  final BehaviorSubject<UploadProgress> _uploadingController =
+      BehaviorSubject();
 
   Stream<UploadProgress> get uploadingResult => _uploadingController.stream;
 
-  BehaviorSubject<List<ChatTextMentionModel>> _mentionsController =
-      new BehaviorSubject();
+  final BehaviorSubject<List<ChatTextMentionModel>> _mentionsController =
+      BehaviorSubject();
 
   Stream<List<ChatTextMentionModel>> get mentionsResult =>
       _mentionsController.stream;
 
-  BehaviorSubject<bool> _showMentionsController =
-      new BehaviorSubject.seeded(false);
+  final BehaviorSubject<bool> _showMentionsController =
+      BehaviorSubject.seeded(false);
 
   Stream<bool> get showMentionsResult => _showMentionsController.stream;
 
-  BehaviorSubject<bool> _showSendIconController =
-      new BehaviorSubject.seeded(false);
+  final BehaviorSubject<bool> _showSendIconController =
+      BehaviorSubject.seeded(false);
 
   Stream<bool> get showSendIconResult => _showSendIconController.stream;
 
-  BehaviorSubject<bool> _recordingController = new BehaviorSubject();
+  final BehaviorSubject<bool> _recordingController = BehaviorSubject();
 
   Stream<bool> get recordingResult => _recordingController.stream;
 
-  BehaviorSubject<Duration?> _recordingTimeController = new BehaviorSubject();
+  final BehaviorSubject<Duration?> _recordingTimeController = BehaviorSubject();
 
   Stream<Duration?> get recordingTimeResult => _recordingTimeController.stream;
 
@@ -105,8 +108,9 @@ class TXChatTextInputBloC extends BaseBloC with ErrorHandlerBloC {
   }
 
   void showMentions(bool show) {
-    if (show != (_showMentionsController.valueOrNull ?? false))
+    if (show != (_showMentionsController.valueOrNull ?? false)) {
       _showMentionsController.sinkAddSafe(show);
+    }
     // if(!show)
     //   _mentionsController.sinkAddSafe([]);
   }
@@ -125,7 +129,7 @@ class TXChatTextInputBloC extends BaseBloC with ErrorHandlerBloC {
   void cancelTokenPost() async {
     cancelToken?.cancel();
     _uploadingController.sinkAddSafe(UploadProgress.empty());
-    Future.delayed(Duration(milliseconds: 100), () {
+    Future.delayed(const Duration(milliseconds: 100), () {
       _showUploadingController.sinkAddSafe(false);
     });
   }
@@ -161,7 +165,7 @@ class TXChatTextInputBloC extends BaseBloC with ErrorHandlerBloC {
     }, pmid: pmid, showOnChannel: showOnChannel);
     if (res is ResultSuccess<FileModel>) {
       _showUploadingController.sinkAddSafe(false);
-      Future.delayed(Duration(milliseconds: 100), () {
+      Future.delayed(const Duration(milliseconds: 100), () {
         _uploadingController.sinkAddSafe(UploadProgress.empty());
       });
     } else if (res is ResultError &&
@@ -169,12 +173,12 @@ class TXChatTextInputBloC extends BaseBloC with ErrorHandlerBloC {
       ToastUtil.showToast(R.string.fileAlreadyShared,
           toastLength: Toast.LENGTH_LONG);
       _showUploadingController.sinkAddSafe(false);
-      Future.delayed(Duration(milliseconds: 100), () {
+      Future.delayed(const Duration(milliseconds: 100), () {
         _uploadingController.sinkAddSafe(UploadProgress.empty());
       });
     } else {
       _showUploadingController.sinkAddSafe(false);
-      Future.delayed(Duration(milliseconds: 100), () {
+      Future.delayed(const Duration(milliseconds: 100), () {
         _uploadingController.sinkAddSafe(UploadProgress.empty());
       });
       showErrorMessage(res);
@@ -248,7 +252,7 @@ class TXChatTextInputBloC extends BaseBloC with ErrorHandlerBloC {
     }
     //DONE
     _showUploadingController.sinkAddSafe(false);
-    Future.delayed(Duration(milliseconds: 100), () {
+    Future.delayed(const Duration(milliseconds: 100), () {
       _uploadingController.sinkAddSafe(UploadProgress.empty());
     });
   }
@@ -290,14 +294,14 @@ class TXChatTextInputBloC extends BaseBloC with ErrorHandlerBloC {
       }
     }
 
-    members.forEach((element) {
+    for (var element in members) {
       list.add(ChatTextMentionModel(
           url: CommonUtils.getMemberPhoto(element),
           displayName: CommonUtils.getMemberUsername(element) ?? "",
           userPresence: element.userPresence,
           isMember: true,
           isActive: element.active && !element.isDeletedUser));
-    });
+    }
 
     list.sort((c1, c2) => c1.displayName
         .trim()
@@ -330,18 +334,19 @@ class TXChatTextInputBloC extends BaseBloC with ErrorHandlerBloC {
   AnotherAudioRecorder? recorder;
   Timer? recordTimer;
 
-  Future<Recording?> recorderStatus() async {
-    return await recorder?.current();
-  }
+  // Future<Recording?> recorderStatus() async {
+
+  //   record.st
+  //   return await recorder?.current();
+  // }
 
   void onTapForRecord() async {
+    // await Permission.audio.request();
     final isUndeterminedMic = await Permission.microphone.isDenied;
-    final isUndeterminedStorage = await Permission.storage.isDenied;
-    if (isUndeterminedMic || isUndeterminedStorage) {
+    // final isUndeterminedAudio = await Permission.audio.isDenied;
+    if (isUndeterminedMic) {
       if (isUndeterminedMic) Permission.microphone.request();
-      if (isUndeterminedStorage) Permission.storage.request();
-    } else if (await Permission.microphone.request().isGranted &&
-        await Permission.storage.request().isGranted) {
+    } else if (await Permission.microphone.isGranted) {
       final audioPlayer = AudioPlayer();
       audioPlayer.play(AssetSource(R.sound.startRecording),
           mode: Platform.isAndroid
@@ -367,17 +372,17 @@ class TXChatTextInputBloC extends BaseBloC with ErrorHandlerBloC {
     processStarts = true;
     recordInitializationCompleted = BehaviorSubject();
     final isUndeterminedMic = await Permission.microphone.isDenied;
-    final isUndeterminedStorage = await Permission.storage.isDenied;
-    if (isUndeterminedMic || isUndeterminedStorage) {
-      Future.delayed(Duration(milliseconds: 500), () {
+    // final isUndeterminedStorage = await Permission.storage.isDenied;
+
+    if (isUndeterminedMic) {
+      Future.delayed(const Duration(milliseconds: 500), () {
         recordInitializationSubscription?.cancel();
       });
-      if (isUndeterminedMic) Permission.microphone.request();
-      if (isUndeterminedStorage) Permission.storage.request();
-    } else if (await Permission.microphone.isGranted &&
-        await Permission.storage.isGranted) {
+      if (isUndeterminedMic) await Permission.microphone.request();
+      // if (isUndeterminedStorage) Permission.storage.request();
+    } else if (await Permission.microphone.isGranted) {
       final audioPlayer = AudioPlayer();
-      final player = await audioPlayer.play(AssetSource(R.sound.startRecording),
+      await audioPlayer.play(AssetSource(R.sound.startRecording),
           mode: Platform.isAndroid
               ? PlayerMode.mediaPlayer
               : PlayerMode.lowLatency);
@@ -399,7 +404,7 @@ class TXChatTextInputBloC extends BaseBloC with ErrorHandlerBloC {
         audioCompleted?.cancel();
       });
     } else {
-      Future.delayed(Duration(milliseconds: 500), () {
+      Future.delayed(const Duration(milliseconds: 500), () {
         recordInitializationSubscription?.cancel();
       });
       openAppSettings();
@@ -414,63 +419,76 @@ class TXChatTextInputBloC extends BaseBloC with ErrorHandlerBloC {
     _recordingController.sinkAddSafe(true);
     final path = (await Injector.instance.fileCacheManager.getFilePath()) +
         "/record_${DateTime.now()}.aac".replaceAll(' ', '_');
-    recorder = AnotherAudioRecorder(path, audioFormat: AudioFormat.AAC);
-    await recorder?.initialized;
-    await recorder?.start();
+
+    log(path);
+    await record.start(const RecordConfig(), path: path);
+
+    // recorder = AnotherAudioRecorder(path, audioFormat: AudioFormat.AAC);
+    // await recorder?.initialized;
+    // await recorder?.start();
     int count = 1;
     if (recordTimer != null) recordTimer?.cancel();
-    recordTimer = Timer.periodic(Duration(seconds: 1), (time) async {
+    recordTimer = Timer.periodic(const Duration(seconds: 1), (time) async {
       _recordingTimeController.sinkAddSafe(Duration(seconds: count++));
     });
     recordInitializationCompleted?.sinkAddSafe(true);
   }
 
+  final record = AudioRecorder();
+
   void stopRecording(bool? showOnChannel, String? pmid,
       {canceled = false}) async {
+    // final path = await record.stop();
+    // final file = File(path ?? "");
+    // await uploadFile(file, showOnChannel: showOnChannel, pmid: pmid);
+    // // record.dispose();
     if (processStarts) {
       processStarts = false;
       recordInitializationSubscription =
           recordInitializationCompleted?.listen((value) async {
         if (value ?? false) {
           _recordingController.sinkAddSafe(false);
-          if ((await recorderStatus())?.status == RecordingStatus.Recording) {
-            recordTimer?.cancel();
-            _recordingTimeController.sinkAddSafe(null);
-            final result = await recorder?.stop();
-            final audioPlayer = AudioPlayer();
-            audioPlayer.play(AssetSource(R.sound.stopRecording),
-                mode: Platform.isAndroid
-                    ? PlayerMode.mediaPlayer
-                    : PlayerMode.lowLatency);
-            if (canVibrate) {
-              Vibration.vibrate(
-                  pattern: [0, 25, 35, 25],
-                  intensities:
-                      Platform.isAndroid ? [0, 100, 0, 200] : [100, 200]);
-            }
-            if (!canceled) {
-              if (((await recorderStatus())?.duration?.inMilliseconds ?? 0) >=
-                  500) {
-                final file = File(result?.path ?? "");
-                if (file.existsSync()) {
-                  await uploadFile(file,
-                      showOnChannel: showOnChannel, pmid: pmid);
-                  Future.delayed(Duration(milliseconds: 100), () {
-                    file.deleteSync();
-                  });
-                }
-              } else {
-                ToastUtil.showToast(R.string.keepPressingToRecord,
-                    backgroundColor: R.color.primaryColor);
-                File(result?.path ?? "").deleteSync();
-              }
-            } else {
-              final file = File(result?.path ?? "");
-              if (file.existsSync()) {
+          // if ((await recorderStatus())?.status == RecordingStatus.Recording) {
+          recordTimer?.cancel();
+          _recordingTimeController.sinkAddSafe(null);
+          // final result = await recorder?.stop();
+          final path = await record.stop();
+
+          final audioPlayer = AudioPlayer();
+          audioPlayer.play(AssetSource(R.sound.stopRecording),
+              mode: Platform.isAndroid
+                  ? PlayerMode.mediaPlayer
+                  : PlayerMode.lowLatency);
+          if (canVibrate) {
+            Vibration.vibrate(pattern: [
+              0,
+              25,
+              35,
+              25
+            ], intensities: Platform.isAndroid ? [0, 100, 0, 200] : [100, 200]);
+          }
+          if (!canceled) {
+            // if (((await recorderStatus())?.duration?.inMilliseconds ?? 0) >=
+            //     500) {
+            final file = File(path ?? "");
+            if (file.existsSync()) {
+              await uploadFile(file, showOnChannel: showOnChannel, pmid: pmid);
+              Future.delayed(const Duration(milliseconds: 100), () {
                 file.deleteSync();
-              }
+              });
+            }
+            // } else {
+            //   ToastUtil.showToast(R.string.keepPressingToRecord,
+            //       backgroundColor: R.color.primaryColor);
+            //   File(path ?? "").deleteSync();
+            // }
+          } else {
+            final file = File(path ?? "");
+            if (file.existsSync()) {
+              file.deleteSync();
             }
           }
+          // }
         }
         recordInitializationSubscription?.cancel();
       });
