@@ -333,20 +333,14 @@ class TXChatTextInputBloC extends BaseBloC with ErrorHandlerBloC {
 
   AnotherAudioRecorder? recorder;
   Timer? recordTimer;
+  bool processStarts = false;
 
   // Future<Recording?> recorderStatus() async {
-
-  //   record.st
   //   return await recorder?.current();
   // }
 
   void onTapForRecord() async {
-    // await Permission.audio.request();
-    final isUndeterminedMic = await Permission.microphone.isDenied;
-    // final isUndeterminedAudio = await Permission.audio.isDenied;
-    if (isUndeterminedMic) {
-      if (isUndeterminedMic) Permission.microphone.request();
-    } else if (await Permission.microphone.isGranted) {
+    if (Platform.isIOS) {
       final audioPlayer = AudioPlayer();
       audioPlayer.play(AssetSource(R.sound.startRecording),
           mode: Platform.isAndroid
@@ -362,25 +356,35 @@ class TXChatTextInputBloC extends BaseBloC with ErrorHandlerBloC {
           backgroundColor: R.color.primaryColor,
           toastLength: Toast.LENGTH_LONG);
     } else {
-      openAppSettings();
+      final isUndeterminedMic = await Permission.microphone.isDenied;
+      if (isUndeterminedMic) {
+        if (isUndeterminedMic) Permission.microphone.request();
+      } else if (await Permission.microphone.isGranted) {
+        final audioPlayer = AudioPlayer();
+        audioPlayer.play(AssetSource(R.sound.startRecording),
+            mode: Platform.isAndroid
+                ? PlayerMode.mediaPlayer
+                : PlayerMode.lowLatency);
+        if ((await Vibration.hasVibrator()) == true &&
+            (await Vibration.hasCustomVibrationsSupport()) == true) {
+          Vibration.vibrate(
+              pattern: [0, 25, 15, 25],
+              intensities: Platform.isAndroid ? [0, 100, 0, 200] : [100, 200]);
+        }
+        ToastUtil.showToast(R.string.keepPressingToRecord,
+            backgroundColor: R.color.primaryColor,
+            toastLength: Toast.LENGTH_LONG);
+      } else {
+        openAppSettings();
+      }
     }
   }
-
-  bool processStarts = false;
 
   void playRecordingSound() async {
     processStarts = true;
     recordInitializationCompleted = BehaviorSubject();
-    final isUndeterminedMic = await Permission.microphone.isDenied;
-    // final isUndeterminedStorage = await Permission.storage.isDenied;
 
-    if (isUndeterminedMic) {
-      Future.delayed(const Duration(milliseconds: 500), () {
-        recordInitializationSubscription?.cancel();
-      });
-      if (isUndeterminedMic) await Permission.microphone.request();
-      // if (isUndeterminedStorage) Permission.storage.request();
-    } else if (await Permission.microphone.isGranted) {
+    if (Platform.isIOS) {
       final audioPlayer = AudioPlayer();
       await audioPlayer.play(AssetSource(R.sound.startRecording),
           mode: Platform.isAndroid
@@ -404,10 +408,39 @@ class TXChatTextInputBloC extends BaseBloC with ErrorHandlerBloC {
         audioCompleted?.cancel();
       });
     } else {
-      Future.delayed(const Duration(milliseconds: 500), () {
-        recordInitializationSubscription?.cancel();
-      });
-      openAppSettings();
+      final isUndeterminedMic = await Permission.microphone.isDenied;
+      if (isUndeterminedMic) {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          recordInitializationSubscription?.cancel();
+        });
+        await Permission.microphone.request();
+      } else if (await Permission.microphone.isGranted) {
+        final audioPlayer = AudioPlayer();
+        await audioPlayer.play(AssetSource(R.sound.startRecording),
+            mode: Platform.isAndroid
+                ? PlayerMode.mediaPlayer
+                : PlayerMode.lowLatency);
+        StreamSubscription? audioCompleted;
+        audioCompleted = audioPlayer.onPlayerStateChanged.listen((event) async {
+          if (event == PlayerState.completed || event == PlayerState.stopped) {
+            canVibrate = (await Vibration.hasVibrator()) == true &&
+                (await Vibration.hasCustomVibrationsSupport()) == true;
+            if (canVibrate) {
+              Vibration.vibrate(
+                  pattern: [0, 25, 15, 25],
+                  intensities:
+                      Platform.isAndroid ? [0, 100, 0, 200] : [100, 200]);
+            }
+            _startRecording();
+          }
+          audioCompleted?.cancel();
+        });
+      } else {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          recordInitializationSubscription?.cancel();
+        });
+        openAppSettings();
+      }
     }
   }
 
