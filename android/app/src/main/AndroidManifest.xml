@@ -76,7 +76,7 @@
                 <data android:scheme="https" android:host="meet.noysi.com" />
                 <data android:scheme="https" android:host="dev-meet.noysi.com" />
                 <data android:scheme="https" android:host="pre-meet.noysi.com" />
-                <data android:scheme="https" android:host="noysi.com" />
+                <!-- <data android:scheme="https" android:host="noysi.com" /> -->
                 <data android:scheme="https" android:host="dev.noysi.com" />
                 <data android:scheme="https" android:host="pre.noysi.com" />
                 <data android:scheme="http" />
