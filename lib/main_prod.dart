@@ -16,8 +16,6 @@ void main() async {
       FCMController.myBackgroundMessageHandler);
   Injector.initProd();
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-
-
   runZonedGuarded(() async {
     runApp(
       NoysiApp(

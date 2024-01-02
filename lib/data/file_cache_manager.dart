@@ -28,7 +28,9 @@ class FileCacheManager {
 
   Future<String> getFilePath() async {
     var directory = await getTemporaryDirectory();
-    return path.join(directory.path, key);
+
+    // return path.join(directory.path, key);
+    return directory.path;
   }
 
   Future<String> resolveGoogleApiUrl(String baseUri) async {
@@ -48,11 +50,11 @@ class FileCacheManager {
 
   Future<String> resolveUrl(String imageUrl) async {
     final FileInfo? cachedValue = await instance.getFileFromCache(imageUrl);
-    if (cachedValue != null)
+    if (cachedValue != null) {
       return cachedValue.file.path;
-    else {
+    } else {
       final fileUrlFromGoogleApi = await resolveGoogleApiUrl(imageUrl);
-      if(fileUrlFromGoogleApi.isNotEmpty) {
+      if (fileUrlFromGoogleApi.isNotEmpty) {
         File file = await instance.getSingleFile(fileUrlFromGoogleApi);
         String fileETag = file.path.split("/").last;
         String fileExt = fileETag.split(".").last.replaceAll('.', "");
@@ -60,7 +62,8 @@ class FileCacheManager {
         //   fileExt = fileExt.toLowerCase().split('-').last;
         //   fileETag = fileETag.split(".")[fileETag.split(".").length - 2] + ".$fileExt";
         // }
-        if(fileExt.toLowerCase() == 'heic' && !imageUrl.endsWith("?original=true")) {
+        if (fileExt.toLowerCase() == 'heic' &&
+            !imageUrl.endsWith("?original=true")) {
           final tmpDir = (await getTemporaryDirectory()).path;
           final target = '$tmpDir/${DateTime.now().millisecondsSinceEpoch}.jpg';
           final result = await FlutterImageCompress.compressAndGetFile(
@@ -70,8 +73,8 @@ class FileCacheManager {
             quality: 90,
           );
           //final jpgPath = file.path; //await HeicToJpg.convert(file.path);
-          if(result != null) {
-            if(file.existsSync()) file.deleteSync();
+          if (result != null) {
+            if (file.existsSync()) file.deleteSync();
             file = File(result.path);
             fileETag = file.path.split("/").last;
             fileExt = fileETag.split(".").last.replaceAll('.', "");
@@ -80,7 +83,7 @@ class FileCacheManager {
         final fileBytes = await file.readAsBytes();
         final filePutted = await instance.putFile(imageUrl, fileBytes,
             eTag: fileETag, fileExtension: fileExt);
-        if(file.existsSync()) file.deleteSync();
+        if (file.existsSync()) file.deleteSync();
         return filePutted.path;
       }
       return "";
@@ -89,16 +92,18 @@ class FileCacheManager {
 
   Future<String> getCachedFile(String fileUrl) async {
     final FileInfo? cachedValue = await instance.getFileFromCache(fileUrl);
-    if(cachedValue != null) return cachedValue.file.path;
+    if (cachedValue != null) return cachedValue.file.path;
     return '';
   }
 
   String resolveLocalUri(String imageUrl) {
     String localUri = R.image.logo;
-    String value = imageUrl.split("/").isEmpty ? imageUrl.toLowerCase() : imageUrl.split("/").last.toLowerCase();
-    if (value == "defaultavatar1.png")
+    String value = imageUrl.split("/").isEmpty
+        ? imageUrl.toLowerCase()
+        : imageUrl.split("/").last.toLowerCase();
+    if (value == "defaultavatar1.png") {
       localUri = R.image.defAvatar1;
-    else if (value == "defaultavatar2.png")
+    } else if (value == "defaultavatar2.png")
       localUri = R.image.defAvatar2;
     else if (value == "defaultavatar3.png")
       localUri = R.image.defAvatar3;

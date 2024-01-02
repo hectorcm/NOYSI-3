@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'package:code/_res/values/text/custom_localizations_delegate.dart';
 import 'package:code/data/connectivity_manager.dart';
@@ -343,21 +344,26 @@ class _NoysiApp extends StateWithBloC<NoysiApp, AppBloC>
       ToastUtil.showToast(err?.toString() ?? "");
     });
 
-    //For opening url while the app is closed
+    // For opening url while the app is closed
     try {
       final initialUri = await getInitialUri();
-      if (initialUri != null)
+      if (initialUri != null) {
         appLinksContentController
             .sinkAddSafe(AppLinksNavigationModel(link: initialUri.toString()));
+
+        log("$initialUri closed");
+      }
     } on FormatException {
       ToastUtil.showToast("Uri format error");
     }
 
     //For opening url while the app is in memory
     _intentDataLinksStreamSubscription = uriLinkStream.listen((Uri? uri) {
-      if (uri != null)
+      if (uri != null) {
         appLinksContentController
             .sinkAddSafe(AppLinksNavigationModel(link: uri.toString()));
+        log("$uri memeory");
+      }
     }, onError: (err) {
       ToastUtil.showToast(err?.toString() ?? "");
     });
