@@ -26,6 +26,36 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>GIDClientID</key>
+	<string>409801703862-hq6mhvgmu40kragos0t85ckc7e425mpg.apps.googleusercontent.com</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.409801703862-hq6mhvgmu40kragos0t85ckc7e425mpg</string>
+			</array>
+		</dict>
+	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>This app uses the camera to capture image and video messages!</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app uses the microphone to record audio messages!</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>This app uses calendar data to help you manage appointments!</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app needs access to your photo library to help you send images!</string>
+    <key>RTCAppGroupIdentifier</key>
+    <string>group.com.noysi</string>
+    <key>RTCScreenSharingExtension</key>
+    <string>com.noysi.Broadcast-Extension</string>
+    <key>UIBackgroundModes</key>
+        <array>
+            <string>audio</string>
+            <string>voip</string>
+        </array>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

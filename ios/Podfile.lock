@@ -1,6 +1,4 @@
 PODS:
-  - another_audio_recorder (0.5.4):
-    - Flutter
   - AppAuth (1.6.2):
     - AppAuth/Core (= 1.6.2)
     - AppAuth/ExternalUserAgent (= 1.6.2)
@@ -78,7 +76,7 @@ PODS:
     - Firebase/Crashlytics (= 10.18.0)
     - firebase_core
     - Flutter
-  - firebase_messaging (14.7.8):
+  - firebase_messaging (14.7.9):
     - Firebase/Messaging (= 10.18.0)
     - firebase_core
     - Flutter
@@ -315,6 +313,9 @@ PODS:
   - ReachabilitySwift (5.0.0)
   - receive_sharing_intent (0.0.1):
     - Flutter
+  - record_darwin (1.0.0):
+    - Flutter
+    - FlutterMacOS
   - SDWebImage (5.18.6):
     - SDWebImage/Core (= 5.18.6)
   - SDWebImage/Core (5.18.6)
@@ -349,7 +350,6 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
-  - another_audio_recorder (from `.symlinks/plugins/another_audio_recorder/ios`)
   - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/ios`)
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
@@ -379,6 +379,7 @@ DEPENDENCIES:
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - receive_sharing_intent (from `.symlinks/plugins/receive_sharing_intent/ios`)
+  - record_darwin (from `.symlinks/plugins/record_darwin/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
@@ -437,8 +438,6 @@ SPEC REPOS:
     - TOCropViewController
 
 EXTERNAL SOURCES:
-  another_audio_recorder:
-    :path: ".symlinks/plugins/another_audio_recorder/ios"
   audioplayers_darwin:
     :path: ".symlinks/plugins/audioplayers_darwin/ios"
   connectivity_plus:
@@ -497,6 +496,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
   receive_sharing_intent:
     :path: ".symlinks/plugins/receive_sharing_intent/ios"
+  record_darwin:
+    :path: ".symlinks/plugins/record_darwin/ios"
   share_plus:
     :path: ".symlinks/plugins/share_plus/ios"
   shared_preferences_foundation:
@@ -519,7 +520,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
-  another_audio_recorder: dee1fef684a64f55beda4b16b847d264455b5de9
   AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
   audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
   BSImagePicker: 0fe04b574d4d6b81093785d2af6c26227efc8428
@@ -535,7 +535,7 @@ SPEC CHECKSUMS:
   firebase_analytics: 88c111412070acc2b05c1734151f58824f3db657
   firebase_core: 0af4a2b24f62071f9bf283691c0ee41556dcb3f5
   firebase_crashlytics: 55714f63ae0973c54b3a721c451ae5f815086c1f
-  firebase_messaging: d4e4603f091c7b716b3f6c55550b2fa5dbf62ffd
+  firebase_messaging: 875385354f623750aa03204a028d640108bc3412
   FirebaseAnalytics: 4d310b35c48eaa4a058ddc04bdca6bdb5dc0fe80
   FirebaseCore: 2322423314d92f946219c8791674d2f3345b598f
   FirebaseCoreExtension: c08d14c7b22e07994e876d837e6f58642f340087
@@ -587,6 +587,7 @@ SPEC CHECKSUMS:
   PromisesSwift: 28dca69a9c40779916ac2d6985a0192a5cb4a265
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   receive_sharing_intent: c0d87310754e74c0f9542947e7cbdf3a0335a3b1
+  record_darwin: 1f6619f2abac4d1ca91d3eeab038c980d76f1517
   SDWebImage: 3d8caa2430f3d674dbb3e515df4a100a2105af5f
   SDWebImageWebPCoder: 633b813fca24f1de5e076bcd7f720c038b23892b
   share_plus: c3fef564749587fc939ef86ffb283ceac0baf9f5

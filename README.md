@@ -1,3 +1,4 @@
+ flutter build ipa --release --target=lib/main_prod.dart
  flutter build ios --release --target=lib/main_prod.dart
 flutter build appbundle --target=lib/main_prod.dart 
 

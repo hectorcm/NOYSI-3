@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-import 'package:another_audio_recorder/another_audio_recorder.dart';
+// import 'package:another_audio_recorder/another_audio_recorder.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:code/_di/injector.dart';
 import 'package:code/_res/R.dart';
@@ -331,7 +331,7 @@ class TXChatTextInputBloC extends BaseBloC with ErrorHandlerBloC {
     _mentionsController.sinkAddSafe(list);
   }
 
-  AnotherAudioRecorder? recorder;
+  // AnotherAudioRecorder? recorder;
   Timer? recordTimer;
   bool processStarts = false;
 

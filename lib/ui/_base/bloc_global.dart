@@ -25,9 +25,11 @@ Stream<AppSettingsModel> get languageCodeResult =>
 
 BehaviorSubject<bool> localeChangedController = BehaviorSubject();
 
-BehaviorSubject<ShareContentModel?> sharingContentController = BehaviorSubject();
+BehaviorSubject<ShareContentModel?> sharingContentController =
+    BehaviorSubject();
 
-BehaviorSubject<AppLinksNavigationModel?> appLinksContentController = BehaviorSubject();
+BehaviorSubject<AppLinksNavigationModel?> appLinksContentController =
+    BehaviorSubject();
 
 BehaviorSubject<bool> messageDismissed = BehaviorSubject();
 
@@ -37,7 +39,9 @@ BehaviorSubject<TeamTheme> teamThemeController =
     BehaviorSubject.seeded(R.color.defaultTheme);
 
 enum call_status { calling_me, in_call, none }
-BehaviorSubject<call_status> callStatusController = BehaviorSubject.seeded(call_status.none);
+
+BehaviorSubject<call_status> callStatusController =
+    BehaviorSubject.seeded(call_status.none);
 JitsiMeetingListener? jitsiListeners;
 MeetingModel? currentMeeting;
 Future<JitsiMeetingResponse?> joinMeeting(
@@ -47,37 +51,50 @@ Future<JitsiMeetingResponse?> joinMeeting(
     String? userAvatarUrl,
     String? subject,
     bool showOptionsDialog = false}) async {
-  final micPermission = await Permission.microphone.request().isGranted;
-  final cameraPermission = await Permission.camera.request().isGranted;
-  if (!micPermission || !cameraPermission) {
-    txShowWarningDialogBlur(NoysiApp.navigatorKey.currentContext!,
-        blurY: 10,
-        blurX: 10,
-        title: TXTextWidget(
-          text: R.string.enablePermissions,
-          textAlign: TextAlign.start,
-          fontWeight: FontWeight.bold,
-          color: R.color.darkColor,
-          size: 16,
-        ), onAction: (action) {
-      if (action) openAppSettings();
-    },
-        content: Container(
-          child: TXTextWidget(
-            text: R.string.micAndCameraRequiredAlert,
-            color: R.color.grayDarkestColor,
-          ),
-        ));
-    return JitsiMeetingResponse(isSuccess: false, message: "PermissionError");
+  if (Platform.isIOS) {
+    final micPermission = await Permission.microphone.isGranted;
+    final cameraPermission = await Permission.camera.isGranted;
+    if (!micPermission) {
+      await Permission.microphone.request();
+    }
+    if (!cameraPermission) {
+      await Permission.camera.request();
+    }
+  } else {
+    final micPermission = await Permission.microphone.request().isGranted;
+    final cameraPermission = await Permission.camera.request().isGranted;
+    if (!micPermission || !cameraPermission) {
+      txShowWarningDialogBlur(NoysiApp.navigatorKey.currentContext!,
+          blurY: 10,
+          blurX: 10,
+          title: TXTextWidget(
+            text: R.string.enablePermissions,
+            textAlign: TextAlign.start,
+            fontWeight: FontWeight.bold,
+            color: R.color.darkColor,
+            size: 16,
+          ), onAction: (action) {
+        if (action) openAppSettings();
+      },
+          content: Container(
+            child: TXTextWidget(
+              text: R.string.micAndCameraRequiredAlert,
+              color: R.color.grayDarkestColor,
+            ),
+          ));
+      return JitsiMeetingResponse(isSuccess: false, message: "PermissionError");
+    }
   }
-  SharedPreferencesManager _prefs = SharedPreferencesManager();
-  final _prefDisplayName = await _prefs.getStringValue(_prefs.displayName);
-  String displayName = (_prefDisplayName.isEmpty)
-      ? CommonUtils.getMemberUsername(Injector.instance.inMemoryData.currentMember) ?? ""
-      : _prefDisplayName;
-  bool audioMuted = await _prefs.getBoolValue(_prefs.audioMuted);
-  bool videoMuted = await _prefs.getBoolValue(_prefs.videoMuted);
-  bool dontShowDialog = await _prefs.getBoolValue(_prefs.dontShowAgain);
+  SharedPreferencesManager prefs = SharedPreferencesManager();
+  final prefDisplayName = await prefs.getStringValue(prefs.displayName);
+  String displayName = (prefDisplayName.isEmpty)
+      ? CommonUtils.getMemberUsername(
+              Injector.instance.inMemoryData.currentMember) ??
+          ""
+      : prefDisplayName;
+  bool audioMuted = await prefs.getBoolValue(prefs.audioMuted);
+  bool videoMuted = await prefs.getBoolValue(prefs.videoMuted);
+  bool dontShowDialog = await prefs.getBoolValue(prefs.dontShowAgain);
   if (showOptionsDialog || !dontShowDialog) {
     final result = (await txShowMeetingOptionsDialog(
         NoysiApp.navigatorKey.currentContext!, onAudioChange: (value) {
@@ -94,10 +111,10 @@ Future<JitsiMeetingResponse?> joinMeeting(
         initialDisplayName: displayName,
         initialDontShowAgain: dontShowDialog)) as bool?;
     if (result ?? false) {
-      _prefs.setStringValue(_prefs.displayName, displayName);
-      _prefs.setBoolValue(_prefs.dontShowAgain, dontShowDialog);
-      _prefs.setBoolValue(_prefs.videoMuted, videoMuted);
-      _prefs.setBoolValue(_prefs.audioMuted, audioMuted);
+      prefs.setStringValue(prefs.displayName, displayName);
+      prefs.setBoolValue(prefs.dontShowAgain, dontShowDialog);
+      prefs.setBoolValue(prefs.videoMuted, videoMuted);
+      prefs.setBoolValue(prefs.audioMuted, audioMuted);
     } else {
       callStatusController.sinkAddSafe(call_status.none);
       return JitsiMeetingResponse(isSuccess: false, message: "CANCELLED");
@@ -178,24 +195,28 @@ Future<JitsiMeetingResponse?> _joinMeeting(
     //   featureFlag.iOSRecordingEnabled = true;
     // }
 
-    var options = JitsiMeetingOptions(roomNameOrUrl: room,
-      serverUrl: url.isNullOrEmpty() ? Injector.instance.meetingBaseUrl : url,
-      subject: subject,
-      userDisplayName: displayName.isNullOrEmpty()
-          ? CommonUtils.getMemberUsername(Injector.instance.inMemoryData.currentMember) ?? ""
-          : displayName,
-      userEmail: userEmail.isNullOrEmpty()
-          ? Injector.instance.inMemoryData.currentMember?.profile?.email ?? ""
-          : userEmail,
-      userAvatarUrl: userAvatarUrl,
-      isAudioMuted: audioMuted,
-      isVideoMuted: videoMuted,
-      isAudioOnly: false,
-      featureFlags: featureFlags);
+    var options = JitsiMeetingOptions(
+        roomNameOrUrl: room,
+        serverUrl: url.isNullOrEmpty() ? Injector.instance.meetingBaseUrl : url,
+        subject: subject,
+        userDisplayName: displayName.isNullOrEmpty()
+            ? CommonUtils.getMemberUsername(
+                    Injector.instance.inMemoryData.currentMember) ??
+                ""
+            : displayName,
+        userEmail: userEmail.isNullOrEmpty()
+            ? Injector.instance.inMemoryData.currentMember?.profile?.email ?? ""
+            : userEmail,
+        userAvatarUrl: userAvatarUrl,
+        isAudioMuted: audioMuted,
+        isVideoMuted: videoMuted,
+        isAudioOnly: false,
+        featureFlags: featureFlags);
 
     absorbPointerAppController.sinkAddSafe(true);
-    await Future.delayed(Duration(milliseconds: 500));
-    return await JitsiMeetWrapper.joinMeeting(options: options, listener: jitsiListeners);
+    await Future.delayed(const Duration(milliseconds: 500));
+    return await JitsiMeetWrapper.joinMeeting(
+        options: options, listener: jitsiListeners);
   } catch (error) {
     debugPrint("error: $error");
     absorbPointerAppController.sinkAddSafe(false);
